@@ -20,18 +20,23 @@
         //Execute Query
         $res = mysqli_query($conn, $sql);
         
-        //Check if the query executed successfully or not
         if($res==true)
         {
-            //Query <br />Executed
             $row = mysqli_fetch_assoc($res);
-            
-            //Get the Individual Value
-            $task_name = $row['task_name'];
-            $task_description = $row['task_description'];
-            $list_id = $row['list_id'];
-            $priority = $row['priority'];
-            $deadline = $row['deadline'];
+
+            if ($row)
+            {
+                $task_name = $row['task_name'];
+                $task_description = $row['task_description'];
+                $list_id = $row['list_id'];
+                $priority = $row['priority'];
+                $deadline = $row['deadline'];
+            }
+            else
+            {
+                header('location:'.SITEURL);
+                exit;
+            }
         }
     }
     else

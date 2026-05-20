@@ -1,13 +1,8 @@
-<?php 
-//Start Session
+<?php
 session_start();
-
-//Create Constants to save Database Credentials
 define('LOCALHOST', 'localhost');
 define('DB_USERNAME', 'root');
 define('DB_PASSWORD', '');
 define('DB_NAME', 'task_manager');
-
-define('SITEURL', 'http://localhost/task-manager/');
-
-?>
+ini_set('mysqli.default_socket', '/tmp/mysql-run/mysql.sock');
+define('SITEURL', 'http://localhost:8080/');

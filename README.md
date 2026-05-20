@@ -1,82 +1,40 @@
-# Task Manager with PHP and MySQL
-Simple Task Manager web app with PHP and MySQL.
+# DBS401 SQL Injection Playground
 
-[Complete TASK MANAGER Tutorial Playlist](https://www.youtube.com/watch?v=1rl36zxqZZw&list=PLBLPjjQlnVXXygeLVmd9mGNtgrHaBOFos)
+Intentionally-vulnerable Task Manager for the FPT University DBS401 project.
+Contains **6 SQL injection challenges** at Easy, Medium, and Hard difficulty.
 
+## Quick Start (Fresh Linux VM)
 
-
-## Support Developer
-1. Subscribe & Share my YouTube Channel - https://bit.ly/vijay-thapa-online-courses
-2. Add a Star 🌟  to this 👆 Repository
-
-## Donate
-
-**[PayPal](https://bit.ly/support-vijay-thapa)**
-
-**[Buy me a Coffee  ☕️](https://www.buymeacoffee.com/vijaythapa)**
-
-**Donate by wire transfer:** E-Mail at *donate@vijaythapa.com* for wire transfer details. 
-
-
-## Technologies Used
-1. Core PHP Programming Language (Procedural Programming)
-2. MySQL Database
-3. HTML
-4. CSS
-
-## How to Download and Run on your PC?
-
-### Pre-Requisites:
-
-1. Download and Install XAMPP
-
-[Click Here to Download](https://www.apachefriends.org/index.html)
-
-2. Install any Text Editor (Sublime Text or Visual Studio Code or Atom or Brackets)
-
-### Installation
-
-1. Download as as Zip or Clone this project
-2. Move this project to Root Directory
-```
-Local Disc C: -> xampp -> htdocs -> 'this project'
-```
-*Local Disk C is the location where xampp was installed*
-
-3. Open XAMPP Control Panel and Start 'Apache' and 'MySQL'
-
-4. Import Database
-
-a. Open 'phpmyadmin' in your browser
-b. Create a Database
-c. Import the SQL file provided with this project
-
-5. Make Changes to settings
-
-Go to 'config' folder and Open 'constants.php' file. Then make changes on following constants
-```php
-<?php 
-//Start Session
-session_start();
-
-//Create Constants to save Database Credentials
-define('LOCALHOST', 'localhost');
-define('DB_USERNAME', 'root'); //Your Database username instead of 'root'
-define('DB_PASSWORD', ''); //Your Database Password instead of null/empty
-define('DB_NAME', 'task_manager'); //Your Database Name if it's not 'task_manager'
-
-define('SITEURL', 'http://localhost/task-manager/'); //Update the home URL of the project if you have changed port number or it's live on server
-
-?>
+```bash
+sudo bash setup.sh
 ```
 
-6. Now, Open the project in your browser. It should run perfectly.
+The script installs Apache, MariaDB, PHP, clones this repo, imports the
+database, and prints hints for all 6 flags.
 
-## For Sponsor or Projects Enquiry
-1. Email - hi@vijaythapa.com
+## Manual Installation
 
-## Follow Me on
-1. LinkedIn - [vijaythapa](https://www.linkedin.com/in/vijaythapa/ "Vijay Thapa on LinkedIn")
-2. Instagram - [@vijaythapa.code](https://www.instagram/vijaythapa.code/ "Vijay Thapa on Instagram")
-3. Facebook - [@thevijaythapa](https://www.facebook.com/thevijaythapa/ "Vijay Thapa on Facebook")
-5. Twitter - [@thevijaythapa](https://www.twitter.com/thevijaythapa "Vijay Thapa on Twitter")
+1. Place the files in your web root (e.g. `/var/www/html/task-manager`).
+2. Import `task_manager.sql` into MySQL/MariaDB.
+3. Update `config/constants.php` with your database credentials.
+4. Browse to `http://localhost/task-manager/`.
+
+## Flag Overview
+
+| # | Level   | Technique            | Entry Point                   | Flag |
+|---|---------|----------------------|-------------------------------|------|
+| 1 | Easy    | In-band numeric OR   | `list-task.php?list_id=`      | `DBS401{n0t_s0_h4rd_t0_f1nd}` |
+| 2 | Easy    | In-band string OR    | `search.php?q=`               | `DBS401{s3Arch_n0t_s0_s3cur3}` |
+| 3 | Medium  | UNION SELECT         | `search.php?q=`               | `DBS401{un10n_1s_p0w3rful}` |
+| 4 | Medium  | Error-based          | `search.php?q=`               | `DBS401{bl1nd_but_n0t_mute}` |
+| 5 | Hard    | Boolean blind        | `user-check.php?id=`          | `DBS401{bl1nd_but_n0t_mute}` |
+| 6 | Hard    | Time-based blind     | `list-task.php?list_id=`      | `DBS401{bl1nd_but_n0t_mute}` |
+
+No table or column name contains the word "flag" — values are hidden as
+task descriptions and API tokens.
+
+## Technologies
+
+- PHP 8.x (procedural)
+- MySQL / MariaDB
+- Apache 2

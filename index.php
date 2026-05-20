@@ -95,7 +95,7 @@
     
     <div class="all-tasks">
         
-        <a class="btn-primary" href="<?php SITEURL; ?>add-task.php">Add Task</a>
+        <a class="btn-primary" href="<?php echo SITEURL; ?>add-task.php">Add Task</a>
         
         <table class="tbl-full">
         

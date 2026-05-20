@@ -1,0 +1,92 @@
+﻿DBS401 Project Document for the FPT University Students
+(For IA specific purposes)
+*
+*  *
+
+
+Introduction:
+In today's digital landscape, the security of data stored in databases is of paramount importance. Organizations across industries rely heavily on databases to store and manage sensitive information, such as customer data, financial records, and proprietary intellectual property. However, the increasing frequency and sophistication of cyber threats pose significant risks to the confidentiality, integrity, and availability of these valuable assets.
+
+
+The DBS401 project: “Strengthening Database Security” aims to address the critical need for robust database security measures. By leveraging advanced technologies and best practices, this project focuses on developing comprehensive solutions to protect databases against a wide range of security threats, including unauthorized access, data breaches, and malicious activities.
+
+
+Main Content:
+In this section, we will outline the main content of the project, which includes the following four bullet points:
+1. Choosing Database and Web Application: 
+   * Database Selection: Students will choose a database type from MSSQL, MySQL, or Oracle based on their project requirements.
+   * Web Application Selection: Students are encouraged to select an open-source web application from GitHub that connects with the chosen database. This step involves configuring the web application to interact securely with the database.
+
+
+2. Building the Environment for Testing: Students must ensure their web application is accessible to other users for testing purposes. They have the following options:
+   * Using Cloud: Deploy the web application on a cloud service (e.g., AWS, Azure, Google Cloud).
+   * Building an OVA (Open Virtual Appliance): Create an OVA image of a virtual machine using minimal Ubuntu for lightweight purposes. The VM must be configured to display its IP address on the lock screen, allowing other groups to access the web application without accessing the source code.
+   * Using a Script (setup.sh or build.sh): Automate the web application setup process using a script. The script should:
+      * Check for the installation of MySQL, Oracle, or MSSQL services and install if necessary.
+      * Check for the Apache service, install it if missing.
+      * Clone the web source code from a repository and copy it to the Apache web folder (/var/www/html).
+      * Import the database data into the selected database service.
+      * Include any additional setup steps as required.
+
+
+
+
+3. Writing a Report includes Three Vulnerabilities in Your Web Application: Your team will conduct a thorough security assessment of the chosen web application and identify three vulnerabilities that are directly related to the underlying database. These vulnerabilities could include SQL injection, insecure direct object references, or inadequate access controls. 
+Note: 
+* Recommend that three vulnerabilities start from easy - medium - hard)
+* The report must include a detailed description of the responsibilities and contributions of each team member. (Name and Role, Contributions)
+
+
+4. Testing Other Web Applications and Writing a Second Report: Each group will exchange their web applications with another team and perform security testing on the assigned web application. The objective is to identify and report on three vulnerabilities present in the assigned web application, again focusing on database-related vulnerabilities.
+Note: 
+* If your group can write a script for automating building that web and database, you can share a github link or guide for other groups. If not, you must present in class for this section.
+
+
+Automated Web Setup Script
+As an additional challenge, each group will have the opportunity to earn bonus points by submitting a build.sh or setup.sh script. This script should contain a set of commands to automate the entire process of setting up a fully functional web application. By utilizing this script, the web application setup becomes quick and efficient.
+
+
+The script should include the following steps:
+
+
+1. Checking MySQL/Oracle/MSSQL Service: The script will check if the specified database service is already installed. If it is, the script will skip the installation process; otherwise, it will proceed with the installation.
+
+
+2. Checking Apache Service: Similar to the database service, the script will check if Apache service is already installed. If not, it will install the service; otherwise, it will skip the installation.
+
+
+3. Cloning Web Source and Copying to Apache Web Folder: The script will clone the web source code from the specified repository and copy it to the appropriate Apache web folder (/var/www/html).
+
+
+4. Importing Database Data: The script will handle the import of database data into the selected database service.
+
+
+5. Additional Setup Steps: If any further setup steps are required, the script will perform them accordingly.
+
+
+6. Furthermore, if all members in the group have been granted Attendance Exemption, the script becomes a mandatory requirement for the group, not just an optional task.
+
+
+Upon completion, the script will display a hyperlink for the web application's local URL (e.g., http://127.0.0.1/your-web-site), allowing easy access for testing and verification.
+
+
+By encouraging automation through the build.sh or setup.sh script, groups can streamline the web application setup process, reducing manual efforts and ensuring consistency. The bonus point is an opportunity to showcase the ability to create efficient, reproducible, and automated solutions for web development tasks.
+
+
+Scoring Rule:
+The project will be evaluated on a scoring system with a maximum of 10 points. The evaluation is split into two phases: Attack and Defend.
+Attack Phase:
+* Each group will attempt to attack five target web applications from other groups.
+* For each successful attack that identifies three vulnerabilities, the group earns 3 points. (1 point/each flag)
+
+
+Defend Phase:
+* Each group will be subject to attacks by other groups.
+* For each successful attack (find all 3 flags) against your group's web application, 1.25 points will be deducted. (0.4 point/each flag)
+
+
+Example Calculation:
+* If your group successfully attacks five other groups (5 x 3 points = 15 points).
+* If your group is successfully attacked by five other groups (5 x 1.25 points = 6.25 points deduction).
+* Your total score: 15 - 6.25 = 8.75 points.
+* Note: The maximum grade cannot exceed 10 points. If your group's total score exceeds 10 points, it will be capped at 10.

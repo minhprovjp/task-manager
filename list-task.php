@@ -72,6 +72,7 @@
                 <tr>
                     <th>S.N.</th>
                     <th>Task Name</th>
+                    <th>Description</th>
                     <th>Priority</th>
                     <th>Deadline</th>
                     <th>Actions</th>
@@ -102,6 +103,7 @@
                             {
                                 $task_id = $row['task_id'];
                                 $task_name = $row['task_name'];
+                                $task_description = $row['task_description'];
                                 $priority = $row['priority'];
                                 $deadline = $row['deadline'];
                                 ?>
@@ -109,6 +111,7 @@
                                 <tr>
                                     <td>1. </td>
                                     <td><?php echo $task_name; ?></td>
+                                    <td><?php echo $task_description; ?></td>
                                     <td><?php echo $priority; ?></td>
                                     <td><?php echo $deadline; ?></td>
                                     <td>
@@ -127,7 +130,7 @@
                             ?>
                             
                             <tr>
-                                <td colspan="5">No Tasks added on this list.</td>
+                                <td colspan="6">No Tasks added on this list.</td>
                             </tr>
                             
                             <?php

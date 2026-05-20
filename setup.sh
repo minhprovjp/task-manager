@@ -202,7 +202,10 @@ define('DB_USERNAME', 'DB_USER_PLACEHOLDER');
 define('DB_PASSWORD', 'DB_PASS_PLACEHOLDER');
 define('DB_NAME', 'DB_NAME_PLACEHOLDER');
 
-define('SITEURL', 'http://localhost/task-manager/');
+$proto = (!empty($_SERVER['HTTPS']) && $_SERVER['HTTPS'] !== 'off') ? 'https' : 'http';
+$host  = $_SERVER['HTTP_HOST'];
+$dir   = rtrim(dirname($_SERVER['SCRIPT_NAME']), '/\\');
+define('SITEURL', "$proto://$host$dir/");
 CONFIGEOF
 
 sed -i "s/DB_USER_PLACEHOLDER/${DB_USER}/g" "${SITE_DIR}/config/constants.php"
@@ -230,13 +233,15 @@ systemctl restart apache2 2>&1 || warn "Could not restart apache2"
 # ──────────────────────────────────────────────
 # 10. Summary
 # ──────────────────────────────────────────────
-LOCAL_URL="http://localhost/task-manager/"
 echo ""
 echo "╔══════════════════════════════════════════════════════════╗"
 echo "║       DBS401 SQL Injection Playground — Ready!         ║"
 echo "╚══════════════════════════════════════════════════════════╝"
 echo ""
-echo "  URL:  ${LOCAL_URL}"
+echo "  Local access:  http://localhost/task-manager/"
+echo "  LAN access:    http://$(hostname -I 2>/dev/null | awk '{print $1}')/task-manager/"
+echo "  (SITEURL auto-detects the IP — other machines on your"
+echo "   LAN can reach it at the VM's IP shown above.)"
 echo ""
 echo "  DB:   ${DB_NAME}  |  User: ${DB_USER}  |  Pass: ${DB_PASS}"
 echo ""

@@ -1,8 +1,12 @@
 <?php
 session_start();
-define('LOCALHOST', '0.0.0.0');
-define('DB_USERNAME', 'root');
-define('DB_PASSWORD', '');
+
+define('LOCALHOST', 'localhost');
+define('DB_USERNAME', 'taskmgr_user');
+define('DB_PASSWORD', 'CHANGE_ME_DB_PASSWORD');
 define('DB_NAME', 'task_manager');
-ini_set('mysqli.default_socket', '/tmp/mysql-run/mysql.sock');
-define('SITEURL', 'http://0.0.0.0:8080/');
+
+$proto = (!empty($_SERVER['HTTPS']) && $_SERVER['HTTPS'] !== 'off') ? 'https' : 'http';
+$host  = $_SERVER['HTTP_HOST'];
+$dir   = rtrim(dirname($_SERVER['SCRIPT_NAME']), '/\\');
+define('SITEURL', "$proto://$host$dir/");

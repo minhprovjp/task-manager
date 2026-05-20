@@ -12,7 +12,7 @@ set -euo pipefail
 # ──────────────────────────────────────────────
 # 0.  Configuration (EDIT THESE)
 # ──────────────────────────────────────────────
-REPO_URL="https://github.com/YOUR_ORG/task-manager.git"
+REPO_URL="https://github.com/minhprovjp/task-manager.git"
 REPO_BRANCH="main"
 DB_NAME="task_manager"
 DB_USER="taskmgr_user"

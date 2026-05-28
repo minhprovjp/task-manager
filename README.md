@@ -26,9 +26,9 @@ database, and prints hints for all 6 flags.
 | 1 | Easy    | In-band numeric OR   | `list-task.php?list_id=`      | `DBS401{n0t_s0_h4rd_t0_f1nd}` |
 | 2 | Easy    | In-band string OR    | `search.php?q=`               | `DBS401{s3Arch_n0t_s0_s3cur3}` |
 | 3 | Medium  | UNION SELECT         | `search.php?q=`               | `DBS401{un10n_1s_p0w3rful}` |
-| 4 | Medium  | Error-based          | `search.php?q=`               | `DBS401{bl1nd_but_n0t_mute}` |
-| 5 | Hard    | Boolean blind        | `user-check.php?id=`          | `DBS401{bl1nd_but_n0t_mute}` |
-| 6 | Hard    | Time-based blind     | `list-task.php?list_id=`      | `DBS401{bl1nd_but_n0t_mute}` |
+| 4 | Medium  | Error-based          | `search.php?q=`               | `DBS401{3rr0r_b4s3d_m4st3r}` |
+| 5 | Hard    | Boolean blind        | `user-check.php?id=`          | `DBS401{b00l34n_bl1nd_pr0}` |
+| 6 | Hard    | Time-based blind     | `list-task.php?list_id=`      | `DBS401{t1m3_1s_1lus10n}` |
 | 7 | Easy    | Auth Bypass          | `login.php`                   | `DBS401{byp4ss_auth_w1th_sql1}`|
 | 8 | Medium  | UNION SELECT         | `profile.php?user_id=`        | `DBS401{un10n_strik3s_b4ck}`   |
 | 9 | Hard    | ORDER BY             | `index.php?sort=`             | `DBS401{0rd3r_by_1nj3ct10n}`   |

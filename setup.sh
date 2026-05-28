@@ -125,34 +125,15 @@ systemctl start mariadb 2>/dev/null || systemctl start mysql 2>/dev/null || warn
 echo ""
 log "Fetching source code from ${REPO_URL} ..."
 
-if echo "${REPO_URL}" | grep -q "YOUR_ORG"; then
-    warn "REPO_URL still points to placeholder — check setup.sh line 15"
-    warn "Using local files instead (must be run from the repo directory)"
-    SCRIPT_DIR="$(cd "$(dirname "$0")" && pwd)"
-    if [[ -f "${SCRIPT_DIR}/task_manager.sql" ]]; then
-        log "Found local files in ${SCRIPT_DIR}"
-        mkdir -p "${SITE_DIR}" "${SITE_DIR}/config" "${SITE_DIR}/css"
-        cp "${SCRIPT_DIR}"/*.php "${SITE_DIR}/" 2>/dev/null
-        cp "${SCRIPT_DIR}"/*.sql "${SITE_DIR}/" 2>/dev/null
-        cp "${SCRIPT_DIR}"/*.md "${SITE_DIR}/" 2>/dev/null
-        cp "${SCRIPT_DIR}/config/constants.php" "${SITE_DIR}/config/" 2>/dev/null
-        cp "${SCRIPT_DIR}/css/style.css" "${SITE_DIR}/css/" 2>/dev/null
-        cp "${SCRIPT_DIR}/setup.sh" "${SITE_DIR}/" 2>/dev/null
-    else
-        err "No local files found and REPO_URL has placeholder — edit setup.sh first"
-        exit 1
-    fi
-else
-    if [[ -d "${SITE_DIR}" ]]; then
+if [[ -d "${SITE_DIR}" ]]; then
         log "Directory exists — removing ..."
-        sudo rm -rf "${SITE_DIR}/"
-    fi
-
-    git clone --branch "${REPO_BRANCH}" --depth 1 "${REPO_URL}" "${SITE_DIR}" 2>&1 || {
-        err "Failed to clone repository — check REPO_URL and network"
-        exit 1
-    }
+        sudo rm -rf /var/www/html/task-manager
 fi
+
+git clone --branch "${REPO_BRANCH}" --depth 1 "${REPO_URL}" "${SITE_DIR}" 2>&1 || {
+    err "Failed to clone repository — check REPO_URL and network"
+    exit 1
+}
 
 # ──────────────────────────────────────────────
 # 6.  Configure Database

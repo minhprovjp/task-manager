@@ -145,7 +145,10 @@ if echo "${REPO_URL}" | grep -q "YOUR_ORG"; then
 else
     if [[ -d "${SITE_DIR}" ]]; then
         log "Directory exists — pulling latest ..."
-        cd "${SITE_DIR}" && git pull origin "${REPO_BRANCH}" 2>&1 || warn "git pull failed"
+        cd "${SITE_DIR}" && {
+            git config --global --add safe.directory "${SITE_DIR}"
+            git pull origin "${REPO_BRANCH}" 2>&1 || warn "git pull failed"
+        }
     else
         git clone --branch "${REPO_BRANCH}" --depth 1 "${REPO_URL}" "${SITE_DIR}" 2>&1 || {
             err "Failed to clone repository — check REPO_URL and network"
@@ -161,6 +164,7 @@ echo ""
 log "Configuring database ..."
 
 # Create database (idempotent)
+mysql -u root -e "DROP DATABASE IF EXISTS \`${DB_NAME}\`;" 2>&1
 mysql -u root -e "CREATE DATABASE IF NOT EXISTS \`${DB_NAME}\` CHARACTER SET utf8mb4 COLLATE utf8mb4_general_ci;" 2>&1 || {
     err "Failed to create database — is MySQL running?"
     exit 1
@@ -171,7 +175,6 @@ mysql -u root -e "CREATE DATABASE IF NOT EXISTS \`${DB_NAME}\` CHARACTER SET utf
 # causing PHP's mysql_native_password to fail.  Drop + recreate to force the
 # correct plugin.
 mysql -u root -e "DROP USER IF EXISTS '${DB_USER}'@'localhost';" 2>&1
-mysql -u root -e "DROP DATABASE IF EXISTS \`${DB_NAME}\`;" 2>&1
 mysql -u root -e "CREATE USER '${DB_USER}'@'localhost' IDENTIFIED BY '${DB_PASS}';" 2>&1 || {
     err "Failed to create database user"
     exit 1

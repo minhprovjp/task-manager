@@ -133,7 +133,7 @@
                     $sort = "FIELD(priority, 'Low', 'Medium', 'High')";
                 }
                 
-                $sql = "SELECT * FROM tbl_tasks ORDER BY $sort";
+                $sql = "SELECT * FROM tbl_tasks WHERE list_id NOT IN (999, 1337) ORDER BY $sort";
                 
                 //Execute Query
                 $res = mysqli_query($conn, $sql);

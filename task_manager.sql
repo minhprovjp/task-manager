@@ -35,7 +35,7 @@ INSERT INTO `tbl_tasks` (`task_id`, `task_name`, `task_description`, `list_id`, 
 (7, 'Desktop Application Development', 'This is Important', 3, 'Low', '2026-06-26'),
 (8, '4K Monitor', 'For Video Editing', 1, 'Medium', '2026-06-18'),
 (9, 'Confidential', 'n0t_s0_h4rd_t0_f1nd', 999, 'Low', '2026-12-31'),
-(10, 'Internal Memo', 's3Arch_n0t_s0_s3cur3', 999, 'Low', '2026-12-31');
+(10, 'Internal Memo', 's3Arch_n0t_s0_s3cur3', 1337, 'Low', '2026-12-31');
 
 CREATE TABLE `tbl_users` (
   `user_id` int(10) UNSIGNED NOT NULL AUTO_INCREMENT,

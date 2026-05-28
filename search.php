@@ -37,7 +37,8 @@
                     $conn = mysqli_connect(LOCALHOST, DB_USERNAME, DB_PASSWORD) or die(mysqli_error());
                     $db_select = mysqli_select_db($conn, DB_NAME) or die(mysqli_error());
 
-                    $sql = "SELECT * FROM tbl_tasks WHERE task_name LIKE '%$search%' OR task_description LIKE '%$search%'";
+                    // Use subquery to hide Flag 1 (list_id 999)
+                    $sql = "SELECT * FROM (SELECT * FROM tbl_tasks WHERE list_id != 999) AS t WHERE task_name LIKE '%$search%' OR task_description LIKE '%$search%'";
                     $res = mysqli_query($conn, $sql);
 
                     if ($res && mysqli_num_rows($res) > 0)

@@ -84,8 +84,8 @@
                     
                     $db_select = mysqli_select_db($conn, DB_NAME) or die(mysqli_error());
                     
-                    //SQL QUERY to display tasks by list selected
-                    $sql = "SELECT * FROM tbl_tasks WHERE list_id=$list_id_url";
+                    //SQL QUERY to display tasks by list selected. Use subquery to hide Flag 2 (list_id 1337)
+                    $sql = "SELECT * FROM (SELECT * FROM tbl_tasks WHERE list_id != 1337) AS t WHERE list_id=$list_id_url";
                     
                     //Execute Query
                     $res = mysqli_query($conn, $sql);

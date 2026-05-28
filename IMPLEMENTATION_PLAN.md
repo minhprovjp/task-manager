@@ -48,16 +48,16 @@ id, name, email, message
 
 | # | Value | Technique | Entry Point |
 |---|-------|-----------|-------------|
-| 1 | `DBS401{n0t_s0_h4rd_t0_f1nd}` | Numeric OR | `list-task.php?list_id=1 OR 1=1` — hidden task description (tbl_tasks) |
-| 2 | `DBS401{s3Arch_n0t_s0_s3cur3}` | String OR | `search.php?q=' OR '1'='1` — hidden task description (tbl_tasks) |
-| 3 | `DBS401{un10n_1s_p0w3rful}` | UNION SELECT | `search.php` — admin token from tbl_users |
-| 4 | `DBS401{3rr0r_b4s3d_m4st3r}` | Error-based | `search.php` — staff token via EXTRACTVALUE error |
-| 5 | `DBS401{b00l34n_bl1nd_pr0}` | Boolean blind | `user-check.php?id=` — intern token, char by char |
-| 6 | `DBS401{t1m3_1s_1lus10n}` | Time-based blind | `list-task.php?list_id=` — contractor token, char by char |
-| 7 | `DBS401{byp4ss_auth_w1th_sql1}` | Auth Bypass | `login.php` — hardcoded in script on successful admin login |
-| 8 | `DBS401{un10n_strik3s_b4ck}` | UNION SELECT | `profile.php?user_id=` — manager token from tbl_users |
-| 9 | `DBS401{0rd3r_by_1nj3ct10n}` | ORDER BY | `index.php?sort=` — from tbl_secrets via boolean blind time-based |
-| 10 | `DBS401{1ns3rt_1nt0_pwn3d}` | INSERT | `contact.php` — from tbl_secrets via error-based |
+| 1 | `n0t_s0_h4rd_t0_f1nd` | Numeric OR | `list-task.php?list_id=1 OR 1=1` — hidden task description (tbl_tasks) |
+| 2 | `s3Arch_n0t_s0_s3cur3` | String OR | `search.php?q=' OR '1'='1` — hidden task description (tbl_tasks) |
+| 3 | `un10n_1s_p0w3rful` | UNION SELECT | `search.php` — admin token from tbl_users |
+| 4 | `3rr0r_b4s3d_m4st3r` | Error-based | `search.php` — staff token via EXTRACTVALUE error |
+| 5 | `b00l34n_bl1nd_pr0` | Boolean blind | `user-check.php?id=` — intern token, char by char |
+| 6 | `t1m3_1s_1lus10n` | Time-based blind | `list-task.php?list_id=` — contractor token, char by char |
+| 7 | `byp4ss_auth_w1th_sql1` | Auth Bypass | `login.php` — hardcoded in script on successful admin login |
+| 8 | `un10n_strik3s_b4ck` | UNION SELECT | `profile.php?user_id=` — manager token from tbl_users |
+| 9 | `0rd3r_by_1nj3ct10n` | ORDER BY | `index.php?sort=` — from tbl_secrets via boolean blind time-based |
+| 10 | `1ns3rt_1nt0_pwn3d` | INSERT | `contact.php` — from tbl_secrets via error-based |
 
 ## Bug Fixes Applied
 

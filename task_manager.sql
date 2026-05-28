@@ -61,11 +61,11 @@ CREATE TABLE `tbl_secrets` (
 ) ENGINE=InnoDB DEFAULT CHARSET=utf8mb4;
 
 INSERT INTO `tbl_secrets` (`id`, `secret_key`, `secret_value`) VALUES
-(1, 'order_by_flag', 'DBS401{0rd3r_by_1nj3ct10n}'),
-(2, 'admin_email_flag', 'DBS401{1ns3rt_1nt0_pwn3d}');
+(1, 'order_by_flag', '0rd3r_by_1nj3ct10n'),
+(2, 'admin_email_flag', '1ns3rt_1nt0_pwn3d');
 
 INSERT INTO `tbl_users` (`user_id`, `username`, `password`, `email`, `role`, `token`) VALUES
-(3, 'manager', 'm4n4g3r_p4ss', 'manager@taskmanager.local', 'admin', 'DBS401{un10n_strik3s_b4ck}');
+(3, 'manager', 'm4n4g3r_p4ss', 'manager@taskmanager.local', 'admin', 'un10n_strik3s_b4ck');
 
 CREATE TABLE `tbl_feedback` (
   `id` int(10) UNSIGNED NOT NULL AUTO_INCREMENT,

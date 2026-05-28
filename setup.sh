@@ -145,7 +145,7 @@ if echo "${REPO_URL}" | grep -q "YOUR_ORG"; then
 else
     if [[ -d "${SITE_DIR}" ]]; then
         log "Directory exists — removing ..."
-        sudo rm -rf "${SITE_DIR}"
+        sudo rm -rf "${SITE_DIR}/"
     fi
 
     git clone --branch "${REPO_BRANCH}" --depth 1 "${REPO_URL}" "${SITE_DIR}" 2>&1 || {

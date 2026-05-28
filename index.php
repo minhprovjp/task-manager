@@ -125,8 +125,14 @@
                 //Select Database
                 $db_select = mysqli_select_db($conn, DB_NAME) or die(mysqli_error());
                 
-                //Create SQL Query to Get DAta from Databse
+                //Create SQL Query to Get Data from Databse
                 $sort = isset($_GET['sort']) ? $_GET['sort'] : 'task_id';
+                
+                // Custom sort for priority
+                if ($sort === 'priority') {
+                    $sort = "FIELD(priority, 'Low', 'Medium', 'High')";
+                }
+                
                 $sql = "SELECT * FROM tbl_tasks ORDER BY $sort";
                 
                 //Execute Query

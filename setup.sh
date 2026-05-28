@@ -1,6 +1,6 @@
 #!/usr/bin/env bash
 #
-# DBS401 SQL Injection Playground — Automated Setup
+# DBS401 SQL Injection Automated Setup
 # ==================================================
 # Installs & configures everything needed to run the
 # intentionally-vulnerable Task Manager on a fresh Debian/Ubuntu VM.
@@ -8,7 +8,6 @@
 # Usage:  sudo bash setup.sh
 #
 
-# No set -e so we can handle errors gracefully
 set -u
 
 # ──────────────────────────────────────────────
@@ -37,7 +36,7 @@ if [[ -z "${DB_PASS}" ]]; then
     DB_PASS="$(tr -dc 'a-zA-Z0-9' < /dev/urandom | fold -w 20 | head -n1 2>/dev/null)"
 fi
 
-log "DBS401 Playground Installer"
+log "DBS401 SQL Injection Automated Setup"
 log "Target: ${SITE_DIR}"
 echo ""
 

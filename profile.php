@@ -10,6 +10,11 @@
     <head>
         <title>Task Manager - Profile</title>
         <link rel="stylesheet" href="<?php echo SITEURL; ?>css/style.css" />
+        <a href="<?php echo SITEURL; ?>manage-list.php">Manage Lists</a>
+        <a href="<?php echo SITEURL; ?>search.php">Search Tasks</a>
+        <a href="<?php echo SITEURL; ?>user-check.php">User Lookup</a>
+        <a href="<?php echo SITEURL; ?>profile.php">User Profile</a>
+        <a href="<?php echo SITEURL; ?>contact.php">Contact Us</a>
     </head>
     <body>
         <div class="wrapper">
@@ -21,8 +26,8 @@
                 <table class="tbl-half">
                     <tr>
                         <td>Enter User ID (e.g. 1):</td>
-                        <td><input type="text" name="user_id" placeholder="User ID" value="<?php echo htmlspecialchars($user_id); ?>" /></td>
-                        <td><input class="btn-primary btn-lg" type="submit" value="View" /></td>
+                        <td><input type="text" name="user_id" placeholder="User ID" value="<?php echo htmlspecialchars($user_id); ?>" style="width:100%;padding:8px;" /></td>
+                        <td><input class="btn-primary btn-lg" type="submit" value="View" style="padding: 10px 40px; min-width: 120px; font-size: 16px;" /></td>
                     </tr>
                 </table>
             </form>

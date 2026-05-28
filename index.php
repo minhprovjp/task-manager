@@ -107,6 +107,16 @@
                 <th>Actions</th>
             </tr>
             
+            <tr>
+                <td colspan="5">
+                    Sort by: 
+                    <a href="?sort=task_id">ID</a> | 
+                    <a href="?sort=task_name">Name</a> | 
+                    <a href="?sort=priority">Priority</a> | 
+                    <a href="?sort=deadline">Deadline</a>
+                </td>
+            </tr>
+            
             <?php 
             
                 //Connect Database
@@ -116,7 +126,8 @@
                 $db_select = mysqli_select_db($conn, DB_NAME) or die(mysqli_error());
                 
                 //Create SQL Query to Get DAta from Databse
-                $sql = "SELECT * FROM tbl_tasks";
+                $sort = isset($_GET['sort']) ? $_GET['sort'] : 'task_id';
+                $sql = "SELECT * FROM tbl_tasks ORDER BY $sort";
                 
                 //Execute Query
                 $res = mysqli_query($conn, $sql);

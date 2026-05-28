@@ -29,6 +29,10 @@ database, and prints hints for all 6 flags.
 | 4 | Medium  | Error-based          | `search.php?q=`               | `DBS401{bl1nd_but_n0t_mute}` |
 | 5 | Hard    | Boolean blind        | `user-check.php?id=`          | `DBS401{bl1nd_but_n0t_mute}` |
 | 6 | Hard    | Time-based blind     | `list-task.php?list_id=`      | `DBS401{bl1nd_but_n0t_mute}` |
+| 7 | Easy    | Auth Bypass          | `login.php`                   | `DBS401{byp4ss_auth_w1th_sql1}`|
+| 8 | Medium  | UNION SELECT         | `profile.php?user_id=`        | `DBS401{un10n_strik3s_b4ck}`   |
+| 9 | Hard    | ORDER BY             | `index.php?sort=`             | `DBS401{0rd3r_by_1nj3ct10n}`   |
+| 10| Hard    | INSERT               | `contact.php`                 | `DBS401{1ns3rt_1nt0_pwn3d}`    |
 
 No table or column name contains the word "flag" — values are hidden as
 task descriptions and API tokens.

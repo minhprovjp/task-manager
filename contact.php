@@ -30,16 +30,18 @@
     <head>
         <title>Task Manager - Contact Us</title>
         <link rel="stylesheet" href="<?php echo SITEURL; ?>css/style.css" />
-        <a href="<?php echo SITEURL; ?>manage-list.php">Manage Lists</a>
-        <a href="<?php echo SITEURL; ?>search.php">Search Tasks</a>
-        <a href="<?php echo SITEURL; ?>user-check.php">User Lookup</a>
-        <a href="<?php echo SITEURL; ?>profile.php">User Profile</a>
-        <a href="<?php echo SITEURL; ?>contact.php">Contact Us</a>
     </head>
     <body>
         <div class="wrapper">
             <h1>TASK MANAGER</h1>
-            <a class="btn-secondary" href="<?php echo SITEURL; ?>">Home</a>
+            <div class="menu">
+                <a href="<?php echo SITEURL; ?>">Home</a>
+                <a href="<?php echo SITEURL; ?>manage-list.php">Manage Lists</a>
+                <a href="<?php echo SITEURL; ?>search.php">Search Tasks</a>
+                <a href="<?php echo SITEURL; ?>user-check.php">User Lookup</a>
+                <a href="<?php echo SITEURL; ?>profile.php">User Profile</a>
+                <a href="<?php echo SITEURL; ?>contact.php">Contact Us</a>
+            </div>
             <h3>Contact Us / Feedback</h3>
 
             <p style="color:green;"><?php echo $msg; ?></p>

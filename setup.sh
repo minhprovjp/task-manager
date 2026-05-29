@@ -74,6 +74,49 @@ pkg_ensure() {
     }
 }
 
+start_service() {
+    local svc="$1"
+
+    if command -v systemctl >/dev/null 2>&1; then
+        if systemctl is-active --quiet "${svc}" 2>/dev/null; then
+            log "${svc} already running"
+            return 0
+        fi
+
+        if systemctl start "${svc}" 2>/dev/null; then
+            log "Started ${svc} with systemctl"
+            return 0
+        fi
+    fi
+
+    if command -v service >/dev/null 2>&1; then
+        if service "${svc}" status >/dev/null 2>&1; then
+            log "${svc} already running"
+            return 0
+        fi
+
+        if service "${svc}" start 2>/dev/null; then
+            log "Started ${svc} with service"
+            return 0
+        fi
+    fi
+
+    if [[ -x "/etc/init.d/${svc}" ]]; then
+        if "/etc/init.d/${svc}" start 2>/dev/null; then
+            log "Started ${svc} with init script"
+            return 0
+        fi
+    fi
+
+    warn "Could not start ${svc} automatically"
+    return 1
+}
+
+prepare_mariadb_runtime_dir() {
+    mkdir -p /run/mysqld 2>/dev/null || true
+    chown -R mysql:mysql /run/mysqld 2>/dev/null || true
+}
+
 # ──────────────────────────────────────────────
 # 3.  Install System Dependencies
 # ──────────────────────────────────────────────
@@ -108,15 +151,12 @@ pkg_ensure "unzip"
 echo ""
 log "Starting services ..."
 
-for svc in apache2 mariadb mysql; do
-    if systemctl is-active --quiet "${svc}" 2>/dev/null; then
-        log "${svc} already running"
-        break
-    fi
-done
+start_service "apache2" || true
 
-systemctl start apache2 2>/dev/null  || warn "Could not start apache2"
-systemctl start mariadb 2>/dev/null || systemctl start mysql 2>/dev/null || warn "Could not start MySQL/MariaDB"
+prepare_mariadb_runtime_dir
+if ! start_service "mariadb"; then
+    start_service "mysql" || warn "Could not start MySQL/MariaDB"
+fi
 
 # ──────────────────────────────────────────────
 # 5.  Clone / Update Source Code
@@ -203,8 +243,18 @@ define('DB_PASSWORD', 'DB_PASS_PLACEHOLDER');
 define('DB_NAME', 'DB_NAME_PLACEHOLDER');
 
 $proto = (!empty($_SERVER['HTTPS']) && $_SERVER['HTTPS'] !== 'off') ? 'https' : 'http';
-$host  = $_SERVER['HTTP_HOST'];
-$dir   = rtrim(dirname($_SERVER['SCRIPT_NAME']), '/\\');
+if (!empty($_SERVER['HTTP_X_FORWARDED_PROTO'])) {
+    $proto = trim(explode(',', $_SERVER['HTTP_X_FORWARDED_PROTO'])[0]);
+} elseif (!empty($_SERVER['REQUEST_SCHEME'])) {
+    $proto = $_SERVER['REQUEST_SCHEME'];
+}
+
+$host = $_SERVER['HTTP_HOST'];
+if (!empty($_SERVER['HTTP_X_FORWARDED_HOST'])) {
+    $host = trim(explode(',', $_SERVER['HTTP_X_FORWARDED_HOST'])[0]);
+}
+
+$dir = rtrim(dirname($_SERVER['SCRIPT_NAME']), '/\\');
 define('SITEURL', "$proto://$host$dir/");
 
 // Require login for all pages except login.php

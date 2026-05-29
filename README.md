@@ -1,12 +1,21 @@
 # DBS401 SQL Injection Playground
 
 Intentionally-vulnerable Task Manager for the FPT University DBS401 project.
-Contains **6 SQL injection challenges** at Easy, Medium, and Hard difficulty.
+Contains **10 SQL injection challenges** at Easy, Medium, and Hard difficulty.
 
 ## Quick Start (Fresh Linux VM)
 
 ```bash
-sudo bash setup.sh
+git clone https://github.com/minhprovjp/task-manager
+cd task-manager
+sudo setup.sh
+```
+
+or
+
+```bash
+sudo apt install curl -y
+curl -fsSL https://raw.githubusercontent.com/minhprovjp/task-manager/master/setup.sh | sudo bash
 ```
 
 The script installs Apache, MariaDB, PHP, clones this repo, imports the

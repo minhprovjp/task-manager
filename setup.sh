@@ -13,8 +13,8 @@ set -u
 # ──────────────────────────────────────────────
 # 0.  Configuration
 # ──────────────────────────────────────────────
-REPO_URL="https://github.com/minhprovjp/task-manager.git"
-REPO_BRANCH="master"
+REPO_URL="https://github.com/hanleduy2005/DBS401.git"
+REPO_BRANCH="main"
 DB_NAME="task_manager"
 DB_USER="taskmgr_user"
 DB_PASS=""                              # auto-generated below if empty
@@ -124,15 +124,34 @@ systemctl start mariadb 2>/dev/null || systemctl start mysql 2>/dev/null || warn
 echo ""
 log "Fetching source code from ${REPO_URL} ..."
 
-if [[ -d "${SITE_DIR}" ]]; then
-        log "Directory exists — removing ..."
-        sudo rm -rf /var/www/html/task-manager
-fi
+if echo "${REPO_URL}" | grep -q "GITHUB_USERNAME"; then
+    warn "REPO_URL still points to placeholder — check setup.sh line 15"
+    warn "Using local files instead (must be run from the repo directory)"
+    SCRIPT_DIR="$(cd "$(dirname "$0")" && pwd)"
+    if [[ -f "${SCRIPT_DIR}/task_manager.sql" ]]; then
+        log "Found local files in ${SCRIPT_DIR}"
+        mkdir -p "${SITE_DIR}" "${SITE_DIR}/config" "${SITE_DIR}/css"
+        cp "${SCRIPT_DIR}"/*.php "${SITE_DIR}/" 2>/dev/null
+        cp "${SCRIPT_DIR}"/*.sql "${SITE_DIR}/" 2>/dev/null
+        cp "${SCRIPT_DIR}"/*.md "${SITE_DIR}/" 2>/dev/null
+        cp "${SCRIPT_DIR}/config/constants.php" "${SITE_DIR}/config/" 2>/dev/null
+        cp "${SCRIPT_DIR}/css/style.css" "${SITE_DIR}/css/" 2>/dev/null
+        cp "${SCRIPT_DIR}/setup.sh" "${SITE_DIR}/" 2>/dev/null
+    else
+        err "No local files found and REPO_URL has placeholder — edit setup.sh first"
+        exit 1
+    fi
+else
+    if [[ -d "${SITE_DIR}" ]]; then
+            log "Directory exists — removing ..."
+            sudo rm -rf /var/www/html/task-manager
+    fi
 
-git clone --branch "${REPO_BRANCH}" --depth 1 "${REPO_URL}" "${SITE_DIR}" 2>&1 || {
-    err "Failed to clone repository — check REPO_URL and network"
-    exit 1
-}
+    git clone --branch "${REPO_BRANCH}" --depth 1 "${REPO_URL}" "${SITE_DIR}" 2>&1 || {
+        err "Failed to clone repository — check REPO_URL and network"
+        exit 1
+    }
+fi
 
 # ──────────────────────────────────────────────
 # 6.  Configure Database
@@ -216,5 +235,21 @@ find "${SITE_DIR}" -type f -exec chmod 644 {} \; 2>/dev/null
 echo ""
 log "Restarting Apache ..."
 systemctl restart apache2 2>&1 || warn "Could not restart apache2"
+
+# ──────────────────────────────────────────────
+# 10. Summary
+# ──────────────────────────────────────────────
+echo ""
+echo "╔══════════════════════════════════════════════════════════╗"
+echo "║       DBS401 SQL Injection Playground — Ready!           ║"
+echo "╚══════════════════════════════════════════════════════════╝"
+echo ""
+echo "  Local access:  http://localhost/task-manager/"
+echo "  LAN access:    http://$(hostname -I 2>/dev/null | awk '{print $1}')/task-manager/"
+echo "  (SITEURL auto-detects the IP — other machines on your"
+echo "   LAN can reach it at the VM's IP shown above.)"
+echo ""
+echo "  DB:   ${DB_NAME}  |  User: ${DB_USER}  |  Pass: ${DB_PASS}"
+echo ""
 
 log "Setup complete."

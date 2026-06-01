@@ -344,7 +344,7 @@ echo "  LAN can reach it at the VM's IP shown above.)"
 echo ""
 echo "  [!] The application uses a Least Privilege Database Architecture."
 echo "  Different features use different DB accounts to enforce isolation!"
-echo "  You may need the shortcut Ctrl+Shift+I to find something juicy!"
+echo "  You may need the shortcut Ctrl+Shift+I to find something interesting!"
 echo ""
 
 log "Setup complete."

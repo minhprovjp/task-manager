@@ -32,6 +32,8 @@
                     </tr>
                 </table>
             </form>
+            
+            <!-- Todo: The search query is currently joining user input directly. Make sure the manager's and admin's tokens aren't leaking through UNION overlaps. -->
 
             <?php if ($search !== ''): ?>
             <table class="tbl-full">

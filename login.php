@@ -73,6 +73,9 @@
                     </tr>
                 </table>
             </form>
+            
+            <!-- IT Note: The admin portal is fragile. Do not use single quotes in your password or the authentication logic gets completely bypassed again. -->
+
         </div>
     </body>
 </html>

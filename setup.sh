@@ -342,7 +342,9 @@ echo "  LAN access:    http://$(hostname -I 2>/dev/null | awk '{print $1}')/task
 echo "  (SITEURL auto-detects the IP — other machines on your"
 echo "   LAN can reach it at the VM's IP shown above.)"
 echo ""
-echo "  DB:   ${DB_NAME}  |  User: ${DB_USER}  |  Pass: ${DB_PASS}"
+echo "  [!] The application uses a Least Privilege Database Architecture."
+echo "      Different features use different DB accounts to enforce isolation!"
+echo "  You may need the shortcut Ctrl+Shift+I to inspect the web page."
 echo ""
 
 log "Setup complete."

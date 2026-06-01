@@ -23,7 +23,9 @@
                 <a href="<?php echo SITEURL; ?>contact.php">Contact Us</a>
                 <a href="<?php echo SITEURL; ?>logout.php">Logout</a>
             </div>
-            <h3>User Profile</h3>
+            <h3>Your Profile</h3>
+            
+            <!-- The 'contractor' complains that his profile queries take forever. Sometimes the database just SLEEPs depending on his input. -->
 
             <form method="GET" action="">
                 <table class="tbl-half">

@@ -21,6 +21,11 @@
             <h3>User Lookup</h3>
 
             <form method="GET" action="">
+                <!-- 
+                    Lookup System Quirks:
+                    - Looking up the 'staff' account throws loud, verbose XML database errors. 
+                    - The 'intern' lookup is quiet, but you can infer data by asking it True/False boolean questions.
+                -->
                 <table class="tbl-half">
                     <tr>
                         <td>User ID:</td>

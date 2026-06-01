@@ -10,7 +10,6 @@
         $conn = mysqli_connect(LOCALHOST, DB_USERNAME, DB_PASSWORD) or die(mysqli_error());
         $db_select = mysqli_select_db($conn, DB_NAME) or die(mysqli_error());
 
-        // Use prepared statements to prevent SQL Injection
         $check_stmt = mysqli_prepare($conn, "SELECT * FROM tbl_users WHERE username = ? OR email = ?");
         mysqli_stmt_bind_param($check_stmt, "ss", $username, $email);
         mysqli_stmt_execute($check_stmt);

@@ -131,29 +131,30 @@ p {
     font-size: 0.95rem;
     text-align: center;
     letter-spacing: 0.5px;
+    background: transparent;
 }
 
-.btn-primary {
+.btn-primary, input[type="submit"].btn-primary, button.btn-primary {
     background-color: transparent;
     color: var(--accent-neon);
     border: 2px solid var(--accent-neon);
     box-shadow: 0 0 10px rgba(0, 240, 255, 0.1) inset;
 }
 
-.btn-primary:hover {
+.btn-primary:hover, input[type="submit"].btn-primary:hover, button.btn-primary:hover {
     background-color: var(--accent-neon);
     color: var(--bg-color);
     box-shadow: 0 0 20px rgba(0, 240, 255, 0.4);
     transform: translateY(-2px);
 }
 
-.btn-secondary {
+.btn-secondary, input[type="submit"].btn-secondary, button.btn-secondary {
     background-color: transparent;
     color: var(--accent-danger);
     border: 2px solid var(--accent-danger);
 }
 
-.btn-secondary:hover {
+.btn-secondary:hover, input[type="submit"].btn-secondary:hover, button.btn-secondary:hover {
     background-color: var(--accent-danger);
     color: var(--bg-color);
     box-shadow: 0 0 20px rgba(255, 0, 60, 0.4);

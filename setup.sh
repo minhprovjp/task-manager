@@ -223,6 +223,14 @@ mysql -u root -e "CREATE USER 'db_user_lookup'@'localhost' IDENTIFIED BY '${DB_P
 mysql -u root -e "CREATE USER 'db_profile'@'localhost' IDENTIFIED BY '${DB_PASS_PROFILE}';" 2>&1 || { err "Failed to create user db_profile"; exit 1; }
 mysql -u root -e "CREATE USER 'db_feedback'@'localhost' IDENTIFIED BY '${DB_PASS_FEEDBACK}';" 2>&1 || { err "Failed to create user db_feedback"; exit 1; }
 
+# Import schema & seed data
+if [[ -f "${SITE_DIR}/task_manager.sql" ]]; then
+    mysql -u root "${DB_NAME}" < "${SITE_DIR}/task_manager.sql" 2>&1
+    log "Schema imported"
+else
+    warn "task_manager.sql not found at ${SITE_DIR}/task_manager.sql — skipping DB import"
+fi
+
 # Grant restricted privileges
 mysql -u root -e "GRANT SELECT ON \`${DB_NAME}\`.tbl_tasks TO 'db_tasks_ro'@'localhost';" 2>&1
 mysql -u root -e "GRANT SELECT ON \`${DB_NAME}\`.tbl_lists TO 'db_tasks_ro'@'localhost';" 2>&1
@@ -240,14 +248,6 @@ mysql -u root -e "GRANT SELECT, UPDATE ON \`${DB_NAME}\`.tbl_users TO 'db_profil
 mysql -u root -e "GRANT INSERT ON \`${DB_NAME}\`.tbl_feedback TO 'db_feedback'@'localhost';" 2>&1
 
 mysql -u root -e "FLUSH PRIVILEGES;" 2>&1
-
-# Import schema & seed data
-if [[ -f "${SITE_DIR}/task_manager.sql" ]]; then
-    mysql -u root "${DB_NAME}" < "${SITE_DIR}/task_manager.sql" 2>&1
-    log "Schema imported"
-else
-    warn "task_manager.sql not found at ${SITE_DIR}/task_manager.sql — skipping DB import"
-fi
 
 # ──────────────────────────────────────────────
 # 7.  Write Application Configuration

@@ -36,7 +36,7 @@
                 {
                     $user_id = $_GET['id'];
 
-                    $conn = mysqli_connect(LOCALHOST, DB_USERNAME, DB_PASSWORD) or die(mysqli_error());
+                    $conn = mysqli_connect(LOCALHOST, DB_USER_LOOKUP, DB_PASS_LOOKUP) or die(mysqli_error());
                     $db_select = mysqli_select_db($conn, DB_NAME) or die(mysqli_error());
 
                     $sql = "SELECT * FROM tbl_users WHERE user_id = $user_id";

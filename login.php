@@ -8,7 +8,7 @@
         $username = $_POST['username'];
         $password = $_POST['password'];
 
-        $conn = mysqli_connect(LOCALHOST, DB_USERNAME, DB_PASSWORD) or die(mysqli_error());
+        $conn = mysqli_connect(LOCALHOST, DB_USER_AUTH, DB_PASS_AUTH) or die(mysqli_error());
         $db_select = mysqli_select_db($conn, DB_NAME) or die(mysqli_error());
 
         // Vulnerable Query

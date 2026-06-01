@@ -34,6 +34,12 @@ fi
 
 if [[ -z "${DB_PASS}" ]]; then
     DB_PASS="$(tr -dc 'a-zA-Z0-9' < /dev/urandom | fold -w 20 | head -n1 2>/dev/null)"
+    DB_PASS_TASKS_RO="$(tr -dc 'a-zA-Z0-9' < /dev/urandom | fold -w 20 | head -n1 2>/dev/null)"
+    DB_PASS_TASKS_RW="$(tr -dc 'a-zA-Z0-9' < /dev/urandom | fold -w 20 | head -n1 2>/dev/null)"
+    DB_PASS_AUTH="$(tr -dc 'a-zA-Z0-9' < /dev/urandom | fold -w 20 | head -n1 2>/dev/null)"
+    DB_PASS_USER_LOOKUP="$(tr -dc 'a-zA-Z0-9' < /dev/urandom | fold -w 20 | head -n1 2>/dev/null)"
+    DB_PASS_PROFILE="$(tr -dc 'a-zA-Z0-9' < /dev/urandom | fold -w 20 | head -n1 2>/dev/null)"
+    DB_PASS_FEEDBACK="$(tr -dc 'a-zA-Z0-9' < /dev/urandom | fold -w 20 | head -n1 2>/dev/null)"
 fi
 
 log "DBS401 SQL Injection Automated Setup"
@@ -205,16 +211,35 @@ mysql -u root -e "CREATE DATABASE IF NOT EXISTS \`${DB_NAME}\` CHARACTER SET utf
     exit 1
 }
 
-# Create application user
-# On MariaDB 10.3+, CREATE USER IF NOT EXISTS may leave an empty auth plugin,
-# causing PHP's mysql_native_password to fail.  Drop + recreate to force the
-# correct plugin.
-mysql -u root -e "DROP USER IF EXISTS '${DB_USER}'@'localhost';" 2>&1
-mysql -u root -e "CREATE USER '${DB_USER}'@'localhost' IDENTIFIED BY '${DB_PASS}';" 2>&1 || {
-    err "Failed to create database user"
-    exit 1
-}
-mysql -u root -e "GRANT ALL PRIVILEGES ON \`${DB_NAME}\`.* TO '${DB_USER}'@'localhost'; FLUSH PRIVILEGES;" 2>&1 || warn "Could not grant privileges"
+# Create specific least-privilege users
+for role in db_tasks_ro db_tasks_rw db_auth db_user_lookup db_profile db_feedback; do
+    mysql -u root -e "DROP USER IF EXISTS '${role}'@'localhost';" 2>&1
+done
+
+mysql -u root -e "CREATE USER 'db_tasks_ro'@'localhost' IDENTIFIED BY '${DB_PASS_TASKS_RO}';" 2>&1 || { err "Failed to create user db_tasks_ro"; exit 1; }
+mysql -u root -e "CREATE USER 'db_tasks_rw'@'localhost' IDENTIFIED BY '${DB_PASS_TASKS_RW}';" 2>&1 || { err "Failed to create user db_tasks_rw"; exit 1; }
+mysql -u root -e "CREATE USER 'db_auth'@'localhost' IDENTIFIED BY '${DB_PASS_AUTH}';" 2>&1 || { err "Failed to create user db_auth"; exit 1; }
+mysql -u root -e "CREATE USER 'db_user_lookup'@'localhost' IDENTIFIED BY '${DB_PASS_USER_LOOKUP}';" 2>&1 || { err "Failed to create user db_user_lookup"; exit 1; }
+mysql -u root -e "CREATE USER 'db_profile'@'localhost' IDENTIFIED BY '${DB_PASS_PROFILE}';" 2>&1 || { err "Failed to create user db_profile"; exit 1; }
+mysql -u root -e "CREATE USER 'db_feedback'@'localhost' IDENTIFIED BY '${DB_PASS_FEEDBACK}';" 2>&1 || { err "Failed to create user db_feedback"; exit 1; }
+
+# Grant restricted privileges
+mysql -u root -e "GRANT SELECT ON \`${DB_NAME}\`.tbl_tasks TO 'db_tasks_ro'@'localhost';" 2>&1
+mysql -u root -e "GRANT SELECT ON \`${DB_NAME}\`.tbl_lists TO 'db_tasks_ro'@'localhost';" 2>&1
+mysql -u root -e "GRANT SELECT ON \`${DB_NAME}\`.tbl_secrets TO 'db_tasks_ro'@'localhost';" 2>&1
+
+mysql -u root -e "GRANT SELECT, INSERT, UPDATE, DELETE ON \`${DB_NAME}\`.tbl_tasks TO 'db_tasks_rw'@'localhost';" 2>&1
+mysql -u root -e "GRANT SELECT, INSERT, UPDATE, DELETE ON \`${DB_NAME}\`.tbl_lists TO 'db_tasks_rw'@'localhost';" 2>&1
+
+mysql -u root -e "GRANT SELECT, INSERT ON \`${DB_NAME}\`.tbl_users TO 'db_auth'@'localhost';" 2>&1
+
+mysql -u root -e "GRANT SELECT (username, role) ON \`${DB_NAME}\`.tbl_users TO 'db_user_lookup'@'localhost';" 2>&1
+
+mysql -u root -e "GRANT SELECT, UPDATE ON \`${DB_NAME}\`.tbl_users TO 'db_profile'@'localhost';" 2>&1
+
+mysql -u root -e "GRANT INSERT ON \`${DB_NAME}\`.tbl_feedback TO 'db_feedback'@'localhost';" 2>&1
+
+mysql -u root -e "FLUSH PRIVILEGES;" 2>&1
 
 # Import schema & seed data
 if [[ -f "${SITE_DIR}/task_manager.sql" ]]; then
@@ -237,9 +262,25 @@ cat > "${SITE_DIR}/config/constants.php" <<'CONFIGEOF'
 session_start();
 
 define('LOCALHOST', 'localhost');
-define('DB_USERNAME', 'DB_USER_PLACEHOLDER');
-define('DB_PASSWORD', 'DB_PASS_PLACEHOLDER');
 define('DB_NAME', 'DB_NAME_PLACEHOLDER');
+
+define('DB_USER_TASKS_RO', 'db_tasks_ro');
+define('DB_PASS_TASKS_RO', 'DB_PASS_TASKS_RO_PLACEHOLDER');
+
+define('DB_USER_TASKS_RW', 'db_tasks_rw');
+define('DB_PASS_TASKS_RW', 'DB_PASS_TASKS_RW_PLACEHOLDER');
+
+define('DB_USER_AUTH', 'db_auth');
+define('DB_PASS_AUTH', 'DB_PASS_AUTH_PLACEHOLDER');
+
+define('DB_USER_LOOKUP', 'db_user_lookup');
+define('DB_PASS_LOOKUP', 'DB_PASS_USER_LOOKUP_PLACEHOLDER');
+
+define('DB_USER_PROFILE', 'db_profile');
+define('DB_PASS_PROFILE', 'DB_PASS_PROFILE_PLACEHOLDER');
+
+define('DB_USER_FEEDBACK', 'db_feedback');
+define('DB_PASS_FEEDBACK', 'DB_PASS_FEEDBACK_PLACEHOLDER');
 
 $proto = (!empty($_SERVER['HTTPS']) && $_SERVER['HTTPS'] !== 'off') ? 'https' : 'http';
 if (!empty($_SERVER['HTTP_X_FORWARDED_PROTO'])) {
@@ -263,9 +304,13 @@ if (!isset($_SESSION['user']) && basename($_SERVER['PHP_SELF']) != 'login.php' &
 }
 CONFIGEOF
 
-sed -i "s/DB_USER_PLACEHOLDER/${DB_USER}/g" "${SITE_DIR}/config/constants.php"
-sed -i "s/DB_PASS_PLACEHOLDER/${DB_PASS}/g" "${SITE_DIR}/config/constants.php"
 sed -i "s/DB_NAME_PLACEHOLDER/${DB_NAME}/g" "${SITE_DIR}/config/constants.php"
+sed -i "s/DB_PASS_TASKS_RO_PLACEHOLDER/${DB_PASS_TASKS_RO}/g" "${SITE_DIR}/config/constants.php"
+sed -i "s/DB_PASS_TASKS_RW_PLACEHOLDER/${DB_PASS_TASKS_RW}/g" "${SITE_DIR}/config/constants.php"
+sed -i "s/DB_PASS_AUTH_PLACEHOLDER/${DB_PASS_AUTH}/g" "${SITE_DIR}/config/constants.php"
+sed -i "s/DB_PASS_USER_LOOKUP_PLACEHOLDER/${DB_PASS_USER_LOOKUP}/g" "${SITE_DIR}/config/constants.php"
+sed -i "s/DB_PASS_PROFILE_PLACEHOLDER/${DB_PASS_PROFILE}/g" "${SITE_DIR}/config/constants.php"
+sed -i "s/DB_PASS_FEEDBACK_PLACEHOLDER/${DB_PASS_FEEDBACK}/g" "${SITE_DIR}/config/constants.php"
 
 log "config/constants.php updated"
 

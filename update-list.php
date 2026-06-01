@@ -10,7 +10,7 @@
         $list_id = $_GET['list_id'];
         
         //Connect to Database
-        $conn = mysqli_connect(LOCALHOST, DB_USERNAME, DB_PASSWORD) or die(mysqli_error());
+        $conn = mysqli_connect(LOCALHOST, DB_USER_TASKS_RW, DB_PASS_TASKS_RW) or die(mysqli_error());
         
         //SElect DAtabase
         $db_select = mysqli_select_db($conn, DB_NAME) or die(mysqli_error());
@@ -133,7 +133,7 @@
         $list_description = $_POST['list_description'];
         
         //Connect Database
-        $conn2 = mysqli_connect(LOCALHOST, DB_USERNAME, DB_PASSWORD) or die(mysqli_error());
+        $conn2 = mysqli_connect(LOCALHOST, DB_USER_TASKS_RW, DB_PASS_TASKS_RW) or die(mysqli_error());
         
         //SElect the Database
         $db_select2 = mysqli_select_db($conn2, DB_NAME);

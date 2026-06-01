@@ -25,7 +25,7 @@
             <?php 
                 
                 //Comment Displaying Lists From Database in ourMenu
-                $conn2 = mysqli_connect(LOCALHOST, DB_USERNAME, DB_PASSWORD) or die(mysqli_error());
+                $conn2 = mysqli_connect(LOCALHOST, DB_USER_TASKS_RO, DB_PASS_TASKS_RO) or die(mysqli_error());
                 
                 //SELECT DATABASE
                 $db_select2 = mysqli_select_db($conn2, DB_NAME) or die(mysqli_error());
@@ -85,7 +85,7 @@
                 
                 <?php 
                 
-                    $conn = mysqli_connect(LOCALHOST, DB_USERNAME, DB_PASSWORD) or die(mysqli_error());
+                    $conn = mysqli_connect(LOCALHOST, DB_USER_TASKS_RO, DB_PASS_TASKS_RO) or die(mysqli_error());
                     
                     $db_select = mysqli_select_db($conn, DB_NAME) or die(mysqli_error());
                     

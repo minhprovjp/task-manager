@@ -24,7 +24,7 @@
         <?php 
             
             //Comment Displaying Lists From Database in ourMenu
-            $conn2 = mysqli_connect(LOCALHOST, DB_USERNAME, DB_PASSWORD) or die(mysqli_error());
+            $conn2 = mysqli_connect(LOCALHOST, DB_USER_TASKS_RO, DB_PASS_TASKS_RO) or die(mysqli_error());
             
             //SELECT DATABASE
             $db_select2 = mysqli_select_db($conn2, DB_NAME) or die(mysqli_error());
@@ -125,7 +125,7 @@
             <?php 
             
                 //Connect Database
-                $conn = mysqli_connect(LOCALHOST, DB_USERNAME, DB_PASSWORD) or die(mysqli_error());
+                $conn = mysqli_connect(LOCALHOST, DB_USER_TASKS_RO, DB_PASS_TASKS_RO) or die(mysqli_error());
                 
                 //Select Database
                 $db_select = mysqli_select_db($conn, DB_NAME) or die(mysqli_error());
@@ -138,7 +138,7 @@
                     $sort = "FIELD(priority, 'Low', 'Medium', 'High')";
                 }
                 
-                $sql = "SELECT * FROM tbl_tasks WHERE list_id NOT IN (999, 1337) ORDER BY $sort";
+                $sql = "SELECT * FROM tbl_tasks ORDER BY $sort";
                 
                 //Execute Query
                 $res = mysqli_query($conn, $sql);

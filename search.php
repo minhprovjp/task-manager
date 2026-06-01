@@ -42,11 +42,11 @@
                     <th>Deadline</th>
                 </tr>
                 <?php
-                    $conn = mysqli_connect(LOCALHOST, DB_USERNAME, DB_PASSWORD) or die(mysqli_error());
+                    $conn = mysqli_connect(LOCALHOST, DB_USER_TASKS_RO, DB_PASS_TASKS_RO) or die(mysqli_error());
                     $db_select = mysqli_select_db($conn, DB_NAME) or die(mysqli_error());
 
-                    // Use subquery to hide Flag 1 (list_id 999)
-                    $sql = "SELECT * FROM (SELECT * FROM tbl_tasks WHERE list_id != 999) AS t WHERE task_name LIKE '%$search%' OR task_description LIKE '%$search%'";
+                    // Search tasks matching query
+                    $sql = "SELECT * FROM tbl_tasks WHERE task_name LIKE '%$search%' OR task_description LIKE '%$search%'";
                     $res = mysqli_query($conn, $sql);
 
                     if ($res && mysqli_num_rows($res) > 0)

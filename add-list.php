@@ -85,7 +85,7 @@
         $list_description = $_POST['list_description'];
         
         //Connect Database
-        $conn = mysqli_connect(LOCALHOST, DB_USERNAME, DB_PASSWORD) or die(mysqli_error());
+        $conn = mysqli_connect(LOCALHOST, DB_USER_TASKS_RW, DB_PASS_TASKS_RW) or die(mysqli_error());
         
         //Check whether the database connected or not
         /*

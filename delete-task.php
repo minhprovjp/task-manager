@@ -10,7 +10,7 @@
         $task_id = $_GET['task_id'];
         
         //Connect Databaes
-        $conn = mysqli_connect(LOCALHOST, DB_USERNAME, DB_PASSWORD) or die(mysqli_error());
+        $conn = mysqli_connect(LOCALHOST, DB_USER_TASKS_RW, DB_PASS_TASKS_RW) or die(mysqli_error());
         
         //SElect Database
         $db_select = mysqli_select_db($conn, DB_NAME) or die(mysqli_error());

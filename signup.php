@@ -10,15 +10,28 @@
         $conn = mysqli_connect(LOCALHOST, DB_USERNAME, DB_PASSWORD) or die(mysqli_error());
         $db_select = mysqli_select_db($conn, DB_NAME) or die(mysqli_error());
 
-        $sql = "INSERT INTO tbl_users (username, password, email) VALUES ('$username', '$password', '$email')";
-        $res = mysqli_query($conn, $sql);
+        // Use prepared statements to prevent SQL Injection
+        $check_stmt = mysqli_prepare($conn, "SELECT * FROM tbl_users WHERE username = ? OR email = ?");
+        mysqli_stmt_bind_param($check_stmt, "ss", $username, $email);
+        mysqli_stmt_execute($check_stmt);
+        mysqli_stmt_store_result($check_stmt);
 
-        if ($res == true) {
-            $_SESSION['user'] = $username;
-            header('location:'.SITEURL);
+        if (mysqli_stmt_num_rows($check_stmt) > 0) {
+            $error = "Username or Email already exists!";
         } else {
-            $error = "Failed to add user!";
+            $stmt = mysqli_prepare($conn, "INSERT INTO tbl_users (username, password, email) VALUES (?, ?, ?)");
+            mysqli_stmt_bind_param($stmt, "sss", $username, $password, $email);
+            $res = mysqli_stmt_execute($stmt);
+
+            if ($res == true) {
+                $_SESSION['user'] = $username;
+                header('location:'.SITEURL);
+            } else {
+                $error = "Failed to add user!";
+            }
+            mysqli_stmt_close($stmt);
         }
+        mysqli_stmt_close($check_stmt);
     }
 ?>
 <html>

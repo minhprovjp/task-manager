@@ -14,7 +14,7 @@ set -u
 # 0.  Configuration
 # ──────────────────────────────────────────────
 REPO_URL="https://github.com/minhprovjp/task-manager.git"
-REPO_BRANCH="main"
+REPO_BRANCH="master"
 DB_NAME="task_manager"
 DB_USER="taskmgr_user"
 DB_PASS=""                              # auto-generated below if empty

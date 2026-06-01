@@ -12,17 +12,19 @@
         $conn = mysqli_connect(LOCALHOST, DB_USER_FEEDBACK, DB_PASS_FEEDBACK) or die(mysqli_error());
         $db_select = mysqli_select_db($conn, DB_NAME) or die(mysqli_error());
 
-        // Vulnerable Query
-        $sql = "INSERT INTO tbl_feedback (name, email, message) VALUES ('$name', '$email', '$message')";
+        // Secure Prepared Statement
+        $stmt = mysqli_prepare($conn, "INSERT INTO tbl_feedback (name, email, message) VALUES (?, ?, ?)");
+        mysqli_stmt_bind_param($stmt, "sss", $name, $email, $message);
         
-        $res = mysqli_query($conn, $sql);
+        $res = mysqli_stmt_execute($stmt);
 
-        // We make the error visible so EXTRACTVALUE() error-based SQLi works
+        // Safe Error Handling (No raw DB errors exposed)
         if ($res == true) {
             $msg = "Thank you for your feedback!";
         } else {
-            $msg = "Error submitting feedback: " . mysqli_error($conn);
+            $msg = "Error submitting feedback. Please try again later.";
         }
+        mysqli_stmt_close($stmt);
     }
 ?>
 

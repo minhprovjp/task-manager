@@ -234,7 +234,6 @@ fi
 # Grant restricted privileges
 mysql -u root -e "GRANT SELECT ON \`${DB_NAME}\`.tbl_tasks TO 'db_tasks_ro'@'localhost';" 2>&1
 mysql -u root -e "GRANT SELECT ON \`${DB_NAME}\`.tbl_lists TO 'db_tasks_ro'@'localhost';" 2>&1
-mysql -u root -e "GRANT SELECT ON \`${DB_NAME}\`.tbl_secrets TO 'db_tasks_ro'@'localhost';" 2>&1
 
 mysql -u root -e "GRANT SELECT, INSERT, UPDATE, DELETE ON \`${DB_NAME}\`.tbl_tasks TO 'db_tasks_rw'@'localhost';" 2>&1
 mysql -u root -e "GRANT SELECT, INSERT, UPDATE, DELETE ON \`${DB_NAME}\`.tbl_lists TO 'db_tasks_rw'@'localhost';" 2>&1

@@ -133,6 +133,13 @@
                 //Create SQL Query to Get Data from Databse
                 $sort = isset($_GET['sort']) ? $_GET['sort'] : 'task_id';
                 
+                // Secure Whitelist for Sorting
+                $allowed_sort_columns = ['task_id', 'task_name', 'priority', 'deadline'];
+                
+                if (!in_array($sort, $allowed_sort_columns)) {
+                    $sort = 'task_id'; // Default if invalid input provided
+                }
+                
                 // Custom sort for priority
                 if ($sort === 'priority') {
                     $sort = "FIELD(priority, 'Low', 'Medium', 'High')";

@@ -11,8 +11,8 @@ $host  = $_SERVER['HTTP_HOST'];
 $dir   = rtrim(dirname($_SERVER['SCRIPT_NAME']), '/\\');
 define('SITEURL', "$proto://$host$dir/");
 
-// Require login for all pages except login.php
-if (!isset($_SESSION['user']) && basename($_SERVER['PHP_SELF']) != 'login.php') {
+// Require login for all pages except login.php and signup.php
+if (!isset($_SESSION['user']) && basename($_SERVER['PHP_SELF']) != 'login.php' && basename($_SERVER['PHP_SELF']) != 'signup.php') {
     header("Location: ".SITEURL."login.php");
     exit;
 }

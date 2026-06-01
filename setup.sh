@@ -13,7 +13,7 @@ set -u
 # ──────────────────────────────────────────────
 # 0.  Configuration
 # ──────────────────────────────────────────────
-REPO_URL="https://github.com/hanleduy2005/DBS401.git"
+REPO_URL="https://github.com/minhprovjp/task-manager.git"
 REPO_BRANCH="main"
 DB_NAME="task_manager"
 DB_USER="taskmgr_user"

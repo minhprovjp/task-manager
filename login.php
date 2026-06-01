@@ -67,6 +67,7 @@
                     <tr>
                         <td colspan="2">
                             <input class="btn-primary btn-lg" type="submit" name="submit" value="Login" />
+                            &nbsp;&nbsp;
                             <a href="<?php echo SITEURL; ?>signup.php" class="btn-secondary" style="margin-left: 10px; padding: 10px 20px; text-decoration: none; display: inline-block;">Sign Up</a>
                         </td>
                     </tr>

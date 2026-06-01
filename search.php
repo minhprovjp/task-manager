@@ -20,6 +20,7 @@
                 <a href="<?php echo SITEURL; ?>user-check.php">User Lookup</a>
                 <a href="<?php echo SITEURL; ?>profile.php">User Profile</a>
                 <a href="<?php echo SITEURL; ?>contact.php">Contact Us</a>
+                <a href="<?php echo SITEURL; ?>logout.php">Logout</a>
             </div>
             <h3>Search Tasks</h3>
 

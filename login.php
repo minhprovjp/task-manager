@@ -48,6 +48,7 @@
                 <a href="<?php echo SITEURL; ?>user-check.php">User Lookup</a>
                 <a href="<?php echo SITEURL; ?>profile.php">User Profile</a>
                 <a href="<?php echo SITEURL; ?>contact.php">Contact Us</a>
+                <a href="<?php echo SITEURL; ?>logout.php">Logout</a>
             </div>
             <h3>Login</h3>
 
@@ -66,6 +67,7 @@
                     <tr>
                         <td colspan="2">
                             <input class="btn-primary btn-lg" type="submit" name="submit" value="Login" />
+                            <a href="<?php echo SITEURL; ?>signup.php" class="btn-secondary" style="margin-left: 10px; padding: 10px 20px; text-decoration: none; display: inline-block;">Sign Up</a>
                         </td>
                     </tr>
                 </table>

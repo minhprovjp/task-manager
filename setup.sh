@@ -183,14 +183,17 @@ if echo "${REPO_URL}" | grep -q "GITHUB_USERNAME"; then
     fi
 else
     if [[ -d "${SITE_DIR}" ]]; then
-            log "Directory exists — removing ..."
-            sudo rm -rf /var/www/html/task-manager
+        log "Directory exists — pulling latest ..."
+        cd "${SITE_DIR}" && {
+            git config --global --add safe.directory "${SITE_DIR}"
+            git pull origin "${REPO_BRANCH}" 2>&1 || warn "git pull failed"
+        }
+    else
+        git clone --branch "${REPO_BRANCH}" --depth 1 "${REPO_URL}" "${SITE_DIR}" 2>&1 || {
+            err "Failed to clone repository — check REPO_URL and network"
+            exit 1
+        }
     fi
-
-    git clone --branch "${REPO_BRANCH}" --depth 1 "${REPO_URL}" "${SITE_DIR}" 2>&1 || {
-        err "Failed to clone repository — check REPO_URL and network"
-        exit 1
-    }
 fi
 
 # ──────────────────────────────────────────────

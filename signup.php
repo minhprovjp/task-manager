@@ -47,13 +47,13 @@
                     </tr>
                     <tr>
                         <td colspan="2">
-                            <input class="btn-primary btn-lg" type="submit" name="submit" value="Sign Up" />
+                            <input class="btn-primary btn-lg" type="submit" name="submit" value="Sign Up" style="margin-top: 10px; padding: 10px 20px;" />
+                            &nbsp;&nbsp;
+                            <a href="<?php echo SITEURL; ?>login.php" class="btn-primary btn-lg" style="margin-top: 10px; padding: 10px 20px; text-decoration: none; display: inline-block;">Back to Login</a>
                         </td>
                     </tr>
                 </table>
             </form>
-            <br>
-            <a href="<?php echo SITEURL; ?>login.php">Back to Login</a>
         </div>
     </body>
 </html>

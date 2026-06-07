@@ -67,7 +67,7 @@
                         <td><input type="password" name="password" placeholder="Enter Password" /></td>
                     </tr>
                     <tr>
-                        <td colspan="2">
+                        <td colspan="2" class="no-shrink">
                             <input class="btn-primary btn-lg" type="submit" name="submit" value="Login" style="margin-top: 10px; padding: 10px 20px;" />
                             &nbsp;&nbsp;
                             <a href="<?php echo SITEURL; ?>signup.php" class="btn-primary btn-lg" style="margin-top: 10px; padding: 10px 20px; text-decoration: none; display: inline-block;">Sign Up</a>

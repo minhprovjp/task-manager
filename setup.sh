@@ -38,6 +38,7 @@ if [[ -z "${DB_PASS}" ]]; then
     DB_PASS_TASKS_RW="$(tr -dc 'a-zA-Z0-9' < /dev/urandom | fold -w 20 | head -n1 2>/dev/null)"
     DB_PASS_AUTH="$(tr -dc 'a-zA-Z0-9' < /dev/urandom | fold -w 20 | head -n1 2>/dev/null)"
     DB_PASS_USER_LOOKUP="$(tr -dc 'a-zA-Z0-9' < /dev/urandom | fold -w 20 | head -n1 2>/dev/null)"
+    DB_PASS_USER_ERROR="$(tr -dc 'a-zA-Z0-9' < /dev/urandom | fold -w 20 | head -n1 2>/dev/null)"
     DB_PASS_PROFILE="$(tr -dc 'a-zA-Z0-9' < /dev/urandom | fold -w 20 | head -n1 2>/dev/null)"
     DB_PASS_FEEDBACK="$(tr -dc 'a-zA-Z0-9' < /dev/urandom | fold -w 20 | head -n1 2>/dev/null)"
 fi
@@ -212,7 +213,7 @@ mysql -u root -e "CREATE DATABASE IF NOT EXISTS \`${DB_NAME}\` CHARACTER SET utf
 }
 
 # Create specific least-privilege users
-for role in db_tasks_ro db_tasks_rw db_auth db_user_lookup db_profile db_feedback; do
+for role in db_tasks_ro db_tasks_rw db_auth db_user_lookup db_user_error db_profile db_feedback; do
     mysql -u root -e "DROP USER IF EXISTS '${role}'@'localhost';" 2>&1
 done
 
@@ -220,6 +221,7 @@ mysql -u root -e "CREATE USER 'db_tasks_ro'@'localhost' IDENTIFIED BY '${DB_PASS
 mysql -u root -e "CREATE USER 'db_tasks_rw'@'localhost' IDENTIFIED BY '${DB_PASS_TASKS_RW}';" 2>&1 || { err "Failed to create user db_tasks_rw"; exit 1; }
 mysql -u root -e "CREATE USER 'db_auth'@'localhost' IDENTIFIED BY '${DB_PASS_AUTH}';" 2>&1 || { err "Failed to create user db_auth"; exit 1; }
 mysql -u root -e "CREATE USER 'db_user_lookup'@'localhost' IDENTIFIED BY '${DB_PASS_USER_LOOKUP}';" 2>&1 || { err "Failed to create user db_user_lookup"; exit 1; }
+mysql -u root -e "CREATE USER 'db_user_error'@'localhost' IDENTIFIED BY '${DB_PASS_USER_ERROR}';" 2>&1 || { err "Failed to create user db_user_error"; exit 1; }
 mysql -u root -e "CREATE USER 'db_profile'@'localhost' IDENTIFIED BY '${DB_PASS_PROFILE}';" 2>&1 || { err "Failed to create user db_profile"; exit 1; }
 mysql -u root -e "CREATE USER 'db_feedback'@'localhost' IDENTIFIED BY '${DB_PASS_FEEDBACK}';" 2>&1 || { err "Failed to create user db_feedback"; exit 1; }
 
@@ -235,7 +237,6 @@ fi
 mysql -u root -e "GRANT SELECT ON \`${DB_NAME}\`.tbl_tasks TO 'db_tasks_ro'@'localhost';" 2>&1
 mysql -u root -e "GRANT SELECT ON \`${DB_NAME}\`.tbl_lists TO 'db_tasks_ro'@'localhost';" 2>&1
 mysql -u root -e "GRANT SELECT ON \`${DB_NAME}\`.vw_union_flag TO 'db_tasks_ro'@'localhost';" 2>&1
-mysql -u root -e "GRANT SELECT ON \`${DB_NAME}\`.vw_error_flag TO 'db_tasks_ro'@'localhost';" 2>&1
 
 mysql -u root -e "GRANT SELECT, INSERT, UPDATE, DELETE ON \`${DB_NAME}\`.tbl_tasks TO 'db_tasks_rw'@'localhost';" 2>&1
 mysql -u root -e "GRANT SELECT, INSERT, UPDATE, DELETE ON \`${DB_NAME}\`.tbl_lists TO 'db_tasks_rw'@'localhost';" 2>&1
@@ -244,6 +245,10 @@ mysql -u root -e "GRANT SELECT (user_id, username, password, role), INSERT ON \`
 
 mysql -u root -e "GRANT SELECT (user_id, username, role) ON \`${DB_NAME}\`.tbl_users TO 'db_user_lookup'@'localhost';" 2>&1
 mysql -u root -e "GRANT SELECT ON \`${DB_NAME}\`.vw_boolean_flag TO 'db_user_lookup'@'localhost';" 2>&1
+
+mysql -u root -e "GRANT SELECT ON \`${DB_NAME}\`.tbl_tasks TO 'db_user_error'@'localhost';" 2>&1
+mysql -u root -e "GRANT SELECT ON \`${DB_NAME}\`.tbl_lists TO 'db_user_error'@'localhost';" 2>&1
+mysql -u root -e "GRANT SELECT ON \`${DB_NAME}\`.vw_error_flag TO 'db_user_error'@'localhost';" 2>&1
 
 mysql -u root -e "GRANT SELECT (user_id, username, email, role), UPDATE (username, email) ON \`${DB_NAME}\`.tbl_users TO 'db_profile'@'localhost';" 2>&1
 mysql -u root -e "GRANT SELECT ON \`${DB_NAME}\`.vw_time_flag TO 'db_profile'@'localhost';" 2>&1
@@ -278,6 +283,9 @@ define('DB_PASS_AUTH', 'DB_PASS_AUTH_PLACEHOLDER');
 
 define('DB_USER_LOOKUP', 'db_user_lookup');
 define('DB_PASS_LOOKUP', 'DB_PASS_USER_LOOKUP_PLACEHOLDER');
+
+define('DB_USER_ERROR', 'db_user_error');
+define('DB_PASS_ERROR', 'DB_PASS_USER_ERROR_PLACEHOLDER');
 
 define('DB_USER_PROFILE', 'db_profile');
 define('DB_PASS_PROFILE', 'DB_PASS_PROFILE_PLACEHOLDER');
@@ -325,6 +333,7 @@ sed -i "s/DB_PASS_TASKS_RO_PLACEHOLDER/${DB_PASS_TASKS_RO}/g" "${SITE_DIR}/confi
 sed -i "s/DB_PASS_TASKS_RW_PLACEHOLDER/${DB_PASS_TASKS_RW}/g" "${SITE_DIR}/config/constants.php"
 sed -i "s/DB_PASS_AUTH_PLACEHOLDER/${DB_PASS_AUTH}/g" "${SITE_DIR}/config/constants.php"
 sed -i "s/DB_PASS_USER_LOOKUP_PLACEHOLDER/${DB_PASS_USER_LOOKUP}/g" "${SITE_DIR}/config/constants.php"
+sed -i "s/DB_PASS_USER_ERROR_PLACEHOLDER/${DB_PASS_USER_ERROR}/g" "${SITE_DIR}/config/constants.php"
 sed -i "s/DB_PASS_PROFILE_PLACEHOLDER/${DB_PASS_PROFILE}/g" "${SITE_DIR}/config/constants.php"
 sed -i "s/DB_PASS_FEEDBACK_PLACEHOLDER/${DB_PASS_FEEDBACK}/g" "${SITE_DIR}/config/constants.php"
 

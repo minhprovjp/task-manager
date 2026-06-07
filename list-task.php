@@ -24,8 +24,7 @@
             
             <?php 
                 
-                //Comment Displaying Lists From Database in ourMenu
-                $conn2 = mysqli_connect(LOCALHOST, DB_USER_TASKS_RO, DB_PASS_TASKS_RO) or die(mysqli_error());
+                $conn2 = mysqli_connect(LOCALHOST, DB_USER_ERROR, DB_PASS_ERROR) or die(mysqli_error());
                 
                 //SELECT DATABASE
                 $db_select2 = mysqli_select_db($conn2, DB_NAME) or die(mysqli_error());
@@ -86,18 +85,24 @@
                 
                 <?php 
                 
-                    $conn = mysqli_connect(LOCALHOST, DB_USER_TASKS_RO, DB_PASS_TASKS_RO) or die(mysqli_error());
+                    $conn = mysqli_connect(LOCALHOST, DB_USER_ERROR, DB_PASS_ERROR) or die(mysqli_error());
                     
                     $db_select = mysqli_select_db($conn, DB_NAME) or die(mysqli_error());
                     
-                    //SQL QUERY to display tasks by list selected. Use subquery to hide Flag 2 (list_id 1337)
                     $current_user_id = $_SESSION['user_id'];
-                    $sql = "SELECT * FROM (SELECT * FROM tbl_tasks WHERE list_id != 1337 AND user_id=$current_user_id) AS t WHERE list_id=$list_id_url";
+                    $sql = "SELECT * FROM tbl_tasks WHERE list_id=$list_id_url AND user_id=$current_user_id";
                     
                     //Execute Query
                     $res = mysqli_query($conn, $sql);
                     
-                    if($res==true)
+                    if ($res === false)
+                    {
+                        echo "<tr><td colspan='6' style='color: var(--accent-danger); font-weight: bold;'>";
+                        echo "Database Error: " . htmlspecialchars(mysqli_error($conn)) . "<br><br>";
+                        echo "Query: " . htmlspecialchars($sql);
+                        echo "</td></tr>";
+                    }
+                    elseif ($res == true)
                     {
                         //Display the tasks based on list
                         //Count the Rows

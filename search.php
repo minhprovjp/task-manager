@@ -33,7 +33,8 @@
                 </table>
             </form>
             
-            <!-- Todo: The search query is currently joining user input directly. Make sure the manager's and admin's tokens aren't leaking through UNION overlaps. -->
+            <!-- Todo: The search query is currently joining user input directly. Make sure the secret tokens aren't leaking through UNION overlaps. -->
+            <!-- Todo: Disable verbose database error reporting in production. This may expose raw SQL execution errors and leads to extract sensitive schema data or view tokens via error-based side channels. -->
 
             <?php if ($search !== ''): ?>
             <table class="tbl-full">
@@ -54,10 +55,7 @@
 
                     if ($res === false)
                     {
-                        echo "<tr><td colspan='4' style='color: var(--accent-danger); font-weight: bold;'>";
-                        echo "Database Error: " . htmlspecialchars(mysqli_error($conn)) . "<br><br>";
-                        echo "Query: " . htmlspecialchars($sql);
-                        echo "</td></tr>";
+                        echo "<tr><td colspan='4'>No tasks found.</td></tr>";
                     }
                     elseif (mysqli_num_rows($res) > 0)
                     {

@@ -30,7 +30,7 @@
                 $error = "Invalid username or password!";
             }
         } else {
-            $error = "Invalid username or password!";
+            $error = "Database error: ". mysqli_error($conn);
         }
     }
 ?>

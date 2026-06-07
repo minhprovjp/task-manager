@@ -24,6 +24,7 @@
 
             if ($res == true) {
                 $_SESSION['user'] = $username;
+                $_SESSION['user_id'] = mysqli_insert_id($conn);
                 header('location:'.SITEURL);
             } else {
                 $error = "Failed to add user!";

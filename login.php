@@ -19,11 +19,11 @@
             $count = mysqli_num_rows($res);
             if ($count > 0) {
                 $row = mysqli_fetch_assoc($res);
+                $_SESSION['user'] = $row['username'];
+                $_SESSION['user_id'] = $row['user_id'];
                 if ($row['username'] === 'admin') {
-                    $_SESSION['user'] = $row['username'];
                     $error = "Success! Flag: byp4ss_auth_w1th_sql1 <br><br><a class='btn-primary' href='".SITEURL."'>Go to Dashboard</a>";
                 } else {
-                    $_SESSION['user'] = $row['username'];
                     $error = "Logged in as " . $row['username'] . ". But no flag for you! <br><br><a class='btn-primary' href='".SITEURL."'>Go to Dashboard</a>";
                 }
             } else {

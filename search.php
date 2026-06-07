@@ -27,8 +27,8 @@
             <form method="GET" action="">
                 <table class="tbl-half">
                     <tr>
-                        <td><input type="text" name="q" placeholder="Search tasks..." value="<?php echo htmlspecialchars($search); ?>" style="width:100%;padding:8px;" /></td>
-                        <td><input class="btn-primary btn-lg" type="submit" value="Search" /></td>
+                        <td class="no-shrink" style="width: 100%;"><input type="text" name="q" placeholder="Search tasks..." value="<?php echo htmlspecialchars($search); ?>" /></td>
+                        <td style="width: 1%; white-space: nowrap;"><input class="btn-primary btn-inline" type="submit" value="Search" style="width: auto;" /></td>
                     </tr>
                 </table>
             </form>
@@ -47,8 +47,9 @@
                     $conn = mysqli_connect(LOCALHOST, DB_USER_TASKS_RO, DB_PASS_TASKS_RO) or die(mysqli_error());
                     $db_select = mysqli_select_db($conn, DB_NAME) or die(mysqli_error());
 
+                    $current_user_id = $_SESSION['user_id'];
                     // Search tasks matching query
-                    $sql = "SELECT * FROM tbl_tasks WHERE task_name LIKE '%$search%' OR task_description LIKE '%$search%'";
+                    $sql = "SELECT * FROM tbl_tasks WHERE (task_name LIKE '%$search%' OR task_description LIKE '%$search%') AND user_id = $current_user_id";
                     $res = mysqli_query($conn, $sql);
 
                     if ($res && mysqli_num_rows($res) > 0)

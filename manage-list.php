@@ -80,7 +80,8 @@ include('config/constants.php');
                     $db_select = mysqli_select_db($conn, DB_NAME) or die(mysqli_error());
                     
                     //SQl Query to display all data fromo database
-                    $sql = "SELECT * FROM tbl_lists";
+                    $current_user_id = $_SESSION['user_id'];
+                    $sql = "SELECT * FROM tbl_lists WHERE user_id = $current_user_id";
                     
                     //Execute the Query
                     $res = mysqli_query($conn, $sql);

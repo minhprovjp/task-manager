@@ -65,7 +65,8 @@
                                 $db_select = mysqli_select_db($conn, DB_NAME) or die(mysqli_error());
                                 
                                 //SQL query to get the list from table
-                                $sql = "SELECT * FROM tbl_lists";
+                                $current_user_id = $_SESSION['user_id'];
+                                $sql = "SELECT * FROM tbl_lists WHERE user_id = $current_user_id";
                                 
                                 //Execute Query
                                 $res = mysqli_query($conn, $sql);
@@ -155,12 +156,14 @@
         $db_select2 = mysqli_select_db($conn2, DB_NAME) or die(mysqli_error());
         
         //CReate SQL Query to INSERT DATA into DAtabase
+        $current_user_id = $_SESSION['user_id'];
         $sql2 = "INSERT INTO tbl_tasks SET 
             task_name = '$task_name',
             task_description = '$task_description',
             list_id = $list_id,
             priority = '$priority',
-            deadline = '$deadline'
+            deadline = '$deadline',
+            user_id = $current_user_id
         ";
         
         //Execute Query

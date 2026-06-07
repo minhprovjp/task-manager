@@ -31,7 +31,8 @@
                 $db_select2 = mysqli_select_db($conn2, DB_NAME) or die(mysqli_error());
                 
                 //Query to Get the Lists from database
-                $sql2 = "SELECT * FROM tbl_lists";
+                $current_user_id = $_SESSION['user_id'];
+                $sql2 = "SELECT * FROM tbl_lists WHERE user_id = $current_user_id";
                 
                 //Execute Query
                 $res2 = mysqli_query($conn2, $sql2);
@@ -90,7 +91,8 @@
                     $db_select = mysqli_select_db($conn, DB_NAME) or die(mysqli_error());
                     
                     //SQL QUERY to display tasks by list selected. Use subquery to hide Flag 2 (list_id 1337)
-                    $sql = "SELECT * FROM (SELECT * FROM tbl_tasks WHERE list_id != 1337) AS t WHERE list_id=$list_id_url";
+                    $current_user_id = $_SESSION['user_id'];
+                    $sql = "SELECT * FROM (SELECT * FROM tbl_tasks WHERE list_id != 1337 AND user_id=$current_user_id) AS t WHERE list_id=$list_id_url";
                     
                     //Execute Query
                     $res = mysqli_query($conn, $sql);

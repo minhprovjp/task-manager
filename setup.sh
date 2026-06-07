@@ -173,16 +173,16 @@ log "Fetching source code from ${REPO_URL} ..."
 if echo "${REPO_URL}" | grep -q "GITHUB_USERNAME"; then
     warn "REPO_URL still points to placeholder — check setup.sh line 15"
     warn "Using local files instead (must be run from the repo directory)"
-    SCRIPT_DIR="$(cd "$(dirname "$0")" && pwd)"
-    if [[ -f "${SCRIPT_DIR}/task_manager.sql" ]]; then
-        log "Found local files in ${SCRIPT_DIR}"
-        mkdir -p "${SITE_DIR}" "${SITE_DIR}/config" "${SITE_DIR}/css"
-        cp "${SCRIPT_DIR}"/*.php "${SITE_DIR}/" 2>/dev/null
-        cp "${SCRIPT_DIR}"/*.sql "${SITE_DIR}/" 2>/dev/null
-        cp "${SCRIPT_DIR}"/*.md "${SITE_DIR}/" 2>/dev/null
-        cp "${SCRIPT_DIR}/config/constants.php" "${SITE_DIR}/config/" 2>/dev/null
-        cp "${SCRIPT_DIR}/css/style.css" "${SITE_DIR}/css/" 2>/dev/null
-        cp "${SCRIPT_DIR}/setup.sh" "${SITE_DIR}/" 2>/dev/null
+SCRIPT_DIR="$(cd "$(dirname "$0")" && pwd)"
+if [[ -f "${SCRIPT_DIR}/task_manager.sql" ]]; then
+    log "Found local files in ${SCRIPT_DIR}. Copying..."
+    mkdir -p "${SITE_DIR}" "${SITE_DIR}/config" "${SITE_DIR}/css"
+    cp "${SCRIPT_DIR}"/*.php "${SITE_DIR}/" 2>/dev/null
+    cp "${SCRIPT_DIR}"/*.sql "${SITE_DIR}/" 2>/dev/null
+    cp "${SCRIPT_DIR}"/*.md "${SITE_DIR}/" 2>/dev/null
+    cp "${SCRIPT_DIR}/config/constants.php" "${SITE_DIR}/config/" 2>/dev/null
+    cp "${SCRIPT_DIR}/css/style.css" "${SITE_DIR}/css/" 2>/dev/null
+    cp "${SCRIPT_DIR}/setup.sh" "${SITE_DIR}/" 2>/dev/null
     else
         err "No local files found and REPO_URL has placeholder — edit setup.sh first"
         exit 1
@@ -300,6 +300,19 @@ define('SITEURL', "$proto://$host$dir/");
 if (!isset($_SESSION['user']) && basename($_SERVER['PHP_SELF']) != 'login.php' && basename($_SERVER['PHP_SELF']) != 'signup.php') {
     header("Location: ".SITEURL."login.php");
     exit;
+}
+
+if (isset($_SESSION['user']) && !isset($_SESSION['user_id'])) {
+    $conn_init = mysqli_connect(LOCALHOST, DB_USER_AUTH, DB_PASS_AUTH);
+    if ($conn_init) {
+        mysqli_select_db($conn_init, DB_NAME);
+        $user_esc = mysqli_real_escape_string($conn_init, $_SESSION['user']);
+        $res_init = mysqli_query($conn_init, "SELECT user_id FROM tbl_users WHERE username = '$user_esc'");
+        if ($res_init && $row_init = mysqli_fetch_assoc($res_init)) {
+            $_SESSION['user_id'] = $row_init['user_id'];
+        }
+        mysqli_close($conn_init);
+    }
 }
 CONFIGEOF
 

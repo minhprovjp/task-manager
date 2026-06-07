@@ -14,8 +14,9 @@
         //Select Database
         $db_select = mysqli_select_db($conn, DB_NAME) or die(mysqli_error());
         
+        $current_user_id = $_SESSION['user_id'];
         //SQL Query to Get the detail of selected task
-        $sql = "SELECT * FROM tbl_tasks WHERE task_id=$task_id";
+        $sql = "SELECT * FROM tbl_tasks WHERE task_id=$task_id AND user_id=$current_user_id";
         
         //Execute Query
         $res = mysqli_query($conn, $sql);
@@ -110,7 +111,8 @@
                                 $db_select2 = mysqli_select_db($conn2, DB_NAME) or die(mysqli_error());
                                 
                                 //SQL Query to GET Lists
-                                $sql2 = "SELECT * FROM tbl_lists";
+                                $current_user_id = $_SESSION['user_id'];
+                                $sql2 = "SELECT * FROM tbl_lists WHERE user_id=$current_user_id";
                                 
                                 //Execute Query
                                 $res2 = mysqli_query($conn2, $sql2);
@@ -203,6 +205,7 @@
         $db_select3 = mysqli_select_db($conn3, DB_NAME) or die(mysqli_error());
         
         //CREATE SQL QUery to Update TAsk
+        $current_user_id = $_SESSION['user_id'];
         $sql3 = "UPDATE tbl_tasks SET 
         task_name = '$task_name',
         task_description = '$task_description',
@@ -210,7 +213,7 @@
         priority = '$priority',
         deadline = '$deadline'
         WHERE 
-        task_id = $task_id
+        task_id = $task_id AND user_id = $current_user_id
         ";
         
         //Execute Query

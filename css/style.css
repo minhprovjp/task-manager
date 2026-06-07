@@ -185,7 +185,8 @@ p {
 }
 
 .tbl-half {
-    width: 50%;
+    width: 100%;
+    max-width: 850px;
     margin: 1.5rem auto;
 }
 
@@ -224,6 +225,12 @@ form {
 form table tr td {
     padding: 0.8rem 1rem;
     border: none;
+    vertical-align: middle;
+}
+
+form table tr td:first-child:not(.no-shrink) {
+    white-space: nowrap;
+    width: 1%;
 }
 
 form table tr:hover td {
@@ -232,12 +239,12 @@ form table tr:hover td {
 
 input[type="text"], input[type="password"], input[type="email"], input[type="date"], select, textarea {
     width: 100%;
-    padding: 0.8rem 1rem;
+    padding: 0.95rem 1.2rem;
     background: rgba(0, 0, 0, 0.3);
     border: 1px solid rgba(255, 255, 255, 0.1);
     border-radius: 8px;
     color: var(--text-primary);
-    font-size: 1rem;
+    font-size: 1.1rem;
     transition: all 0.3s ease;
 }
 
@@ -331,3 +338,16 @@ td:first-child {
         overflow-x: auto;
     }
 }
+
+/* Inline button styling next to text inputs */
+.btn-inline {
+    padding: 0.95rem 2.2rem !important;
+    font-size: 1.1rem !important;
+    margin: 0 !important;
+    white-space: nowrap;
+    display: inline-block;
+    height: auto;
+    width: 100%;
+    box-sizing: border-box;
+}
+

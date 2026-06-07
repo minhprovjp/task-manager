@@ -30,7 +30,8 @@
             $db_select2 = mysqli_select_db($conn2, DB_NAME) or die(mysqli_error());
             
             //Query to Get the Lists from database
-            $sql2 = "SELECT * FROM tbl_lists";
+            $current_user_id = $_SESSION['user_id'];
+            $sql2 = "SELECT * FROM tbl_lists WHERE user_id = $current_user_id";
             
             //Execute Query
             $res2 = mysqli_query($conn2, $sql2);
@@ -145,7 +146,8 @@
                     $sort = "FIELD(priority, 'Low', 'Medium', 'High')";
                 }
                 
-                $sql = "SELECT * FROM tbl_tasks ORDER BY $sort";
+                $current_user_id = $_SESSION['user_id'];
+                $sql = "SELECT * FROM tbl_tasks WHERE user_id = $current_user_id ORDER BY $sort";
                 
                 //Execute Query
                 $res = mysqli_query($conn, $sql);

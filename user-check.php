@@ -29,8 +29,8 @@
                 <table class="tbl-half">
                     <tr>
                         <td>User ID:</td>
-                        <td><input type="text" name="id" placeholder="Enter user ID" style="width:100%;padding:8px;" /></td>
-                        <td><input class="btn-primary" type="submit" value="Check" /></td>
+                        <td style="width: 100%;"><input type="text" name="id" placeholder="Enter user ID" /></td>
+                        <td style="width: 1%; white-space: nowrap;"><input class="btn-primary btn-inline" type="submit" value="Check" style="width: auto;" /></td>
                     </tr>
                 </table>
             </form>

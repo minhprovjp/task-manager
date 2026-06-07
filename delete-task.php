@@ -15,8 +15,9 @@
         //SElect Database
         $db_select = mysqli_select_db($conn, DB_NAME) or die(mysqli_error());
         
+        $current_user_id = $_SESSION['user_id'];
         //SQL Query to DELETE TASK
-        $sql = "DELETE FROM tbl_tasks WHERE task_id=$task_id";
+        $sql = "DELETE FROM tbl_tasks WHERE task_id=$task_id AND user_id=$current_user_id";
         
         //Execute Query
         $res = mysqli_query($conn, $sql);

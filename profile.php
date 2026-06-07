@@ -31,8 +31,8 @@
                 <table class="tbl-half">
                     <tr>
                         <td>Enter User ID (e.g. 1):</td>
-                        <td><input type="text" name="user_id" placeholder="User ID" value="<?php echo htmlspecialchars($user_id); ?>" style="width:100%;padding:8px;" /></td>
-                        <td><input class="btn-primary btn-lg" type="submit" value="View" style="padding: 10px 40px; min-width: 120px; font-size: 16px;" /></td>
+                        <td style="width: 100%;"><input type="text" name="user_id" placeholder="User ID" value="<?php echo htmlspecialchars($user_id); ?>" /></td>
+                        <td style="width: 1%; white-space: nowrap;"><input class="btn-primary btn-inline" type="submit" value="View" style="width: auto;" /></td>
                     </tr>
                 </table>
             </form>

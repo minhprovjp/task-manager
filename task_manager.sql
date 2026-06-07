@@ -6,15 +6,16 @@ CREATE TABLE `tbl_lists` (
   `list_name` varchar(50) NOT NULL,
   `list_description` varchar(150) DEFAULT NULL,
   `notes` text DEFAULT NULL,
+  `user_id` int(10) UNSIGNED DEFAULT NULL,
   PRIMARY KEY (`list_id`)
 ) ENGINE=InnoDB DEFAULT CHARSET=utf8mb4;
 
-INSERT INTO `tbl_lists` (`list_id`, `list_name`, `list_description`, `notes`) VALUES
-(1, 'To Do', 'All the tasks that must be done soon.', NULL),
-(2, 'Doing', 'All the Tasks that are currently being done.', NULL),
-(3, 'Done', 'All the Tasks that are completed', NULL),
-(7, 'Shopping', 'Tasks for Shopping', NULL),
-(9, 'Internal', 'Internal project notes', NULL);
+INSERT INTO `tbl_lists` (`list_id`, `list_name`, `list_description`, `notes`, `user_id`) VALUES
+(1, 'To Do', 'All the tasks that must be done soon.', NULL, 1),
+(2, 'Doing', 'All the Tasks that are currently being done.', NULL, 1),
+(3, 'Done', 'All the Tasks that are completed', NULL, 1),
+(7, 'Shopping', 'Tasks for Shopping', NULL, 1),
+(9, 'Internal', 'Internal project notes', NULL, 1);
 
 CREATE TABLE `tbl_tasks` (
   `task_id` int(10) UNSIGNED NOT NULL AUTO_INCREMENT,
@@ -23,17 +24,18 @@ CREATE TABLE `tbl_tasks` (
   `list_id` int(11) NOT NULL,
   `priority` varchar(10) NOT NULL,
   `deadline` date NOT NULL,
+  `user_id` int(10) UNSIGNED DEFAULT NULL,
   PRIMARY KEY (`task_id`)
 ) ENGINE=InnoDB DEFAULT CHARSET=utf8mb4;
 
-INSERT INTO `tbl_tasks` (`task_id`, `task_name`, `task_description`, `list_id`, `priority`, `deadline`) VALUES
-(2, 'icon Design', 'This is urgent', 1, 'High', '2026-06-03'),
-(3, 'Buy Things', 'Okay Buy', 3, 'Medium', '2026-06-12'),
-(4, 'Web Page Design', 'All the Tasks for Web Page Design', 1, 'Medium', '2026-06-11'),
-(5, 'Application Development', 'All the tasks', 1, 'Low', '2026-07-03'),
-(6, 'SEO', 'Search Engine Optimization', 2, 'Medium', '2026-06-19'),
-(7, 'Desktop Application Development', 'This is Important', 3, 'Low', '2026-06-26'),
-(8, '4K Monitor', 'For Video Editing', 1, 'Medium', '2026-06-18');
+INSERT INTO `tbl_tasks` (`task_id`, `task_name`, `task_description`, `list_id`, `priority`, `deadline`, `user_id`) VALUES
+(2, 'icon Design', 'This is urgent', 1, 'High', '2026-06-03', 1),
+(3, 'Buy Things', 'Okay Buy', 3, 'Medium', '2026-06-12', 1),
+(4, 'Web Page Design', 'All the Tasks for Web Page Design', 1, 'Medium', '2026-06-11', 1),
+(5, 'Application Development', 'All the tasks', 1, 'Low', '2026-07-03', 1),
+(6, 'SEO', 'Search Engine Optimization', 2, 'Medium', '2026-06-19', 1),
+(7, 'Desktop Application Development', 'This is Important', 3, 'Low', '2026-06-26', 1),
+(8, '4K Monitor', 'For Video Editing', 1, 'Medium', '2026-06-18', 1);
 
 CREATE TABLE `tbl_users` (
   `user_id` int(10) UNSIGNED NOT NULL AUTO_INCREMENT,

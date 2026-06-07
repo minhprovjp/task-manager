@@ -16,3 +16,16 @@ if (!isset($_SESSION['user']) && basename($_SERVER['PHP_SELF']) != 'login.php' &
     header("Location: ".SITEURL."login.php");
     exit;
 }
+
+if (isset($_SESSION['user']) && !isset($_SESSION['user_id'])) {
+    $conn_init = mysqli_connect(LOCALHOST, DB_USERNAME, DB_PASSWORD);
+    if ($conn_init) {
+        mysqli_select_db($conn_init, DB_NAME);
+        $user_esc = mysqli_real_escape_string($conn_init, $_SESSION['user']);
+        $res_init = mysqli_query($conn_init, "SELECT user_id FROM tbl_users WHERE username = '$user_esc'");
+        if ($res_init && $row_init = mysqli_fetch_assoc($res_init)) {
+            $_SESSION['user_id'] = $row_init['user_id'];
+        }
+        mysqli_close($conn_init);
+    }
+}

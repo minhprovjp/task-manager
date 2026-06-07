@@ -106,9 +106,11 @@
         }
         */
         //SQL Query to Insert data into database
+        $current_user_id = $_SESSION['user_id'];
         $sql = "INSERT INTO tbl_lists SET 
             list_name = '$list_name',
-            list_description = '$list_description'
+            list_description = '$list_description',
+            user_id = $current_user_id
         ";
         
         //Execute Query and Insert into Database

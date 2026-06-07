@@ -15,8 +15,9 @@
         //SElect DAtabase
         $db_select = mysqli_select_db($conn, DB_NAME) or die(mysqli_error());
         
+        $current_user_id = $_SESSION['user_id'];
         //Query to Get the Values from Database
-        $sql = "SELECT * FROM tbl_lists WHERE list_id=$list_id";
+        $sql = "SELECT * FROM tbl_lists WHERE list_id=$list_id AND user_id=$current_user_id";
         
         //Execute Query
         $res = mysqli_query($conn, $sql);
@@ -27,12 +28,14 @@
             //Get the Value from Database
             $row = mysqli_fetch_assoc($res); //Value is in array
             
-            //printing $row array
-            //print_r($row);
-            
-            //Create Individual Variable to save the data
-            $list_name = $row['list_name'];
-            $list_description = $row['list_description'];
+            if ($row) {
+                //Create Individual Variable to save the data
+                $list_name = $row['list_name'];
+                $list_description = $row['list_description'];
+            } else {
+                header('location:'.SITEURL.'manage-list.php');
+                exit;
+            }
         }
         else
         {
@@ -138,11 +141,12 @@
         //SElect the Database
         $db_select2 = mysqli_select_db($conn2, DB_NAME);
         
+        $current_user_id = $_SESSION['user_id'];
         //QUERY to Update List
         $sql2 = "UPDATE tbl_lists SET 
             list_name = '$list_name',
             list_description = '$list_description' 
-            WHERE list_id=$list_id
+            WHERE list_id=$list_id AND user_id=$current_user_id
         ";
         
         //Execute the Query

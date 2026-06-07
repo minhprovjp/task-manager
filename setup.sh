@@ -234,15 +234,19 @@ fi
 # Grant restricted privileges
 mysql -u root -e "GRANT SELECT ON \`${DB_NAME}\`.tbl_tasks TO 'db_tasks_ro'@'localhost';" 2>&1
 mysql -u root -e "GRANT SELECT ON \`${DB_NAME}\`.tbl_lists TO 'db_tasks_ro'@'localhost';" 2>&1
+mysql -u root -e "GRANT SELECT ON \`${DB_NAME}\`.vw_union_flag TO 'db_tasks_ro'@'localhost';" 2>&1
+mysql -u root -e "GRANT SELECT ON \`${DB_NAME}\`.vw_error_flag TO 'db_tasks_ro'@'localhost';" 2>&1
 
 mysql -u root -e "GRANT SELECT, INSERT, UPDATE, DELETE ON \`${DB_NAME}\`.tbl_tasks TO 'db_tasks_rw'@'localhost';" 2>&1
 mysql -u root -e "GRANT SELECT, INSERT, UPDATE, DELETE ON \`${DB_NAME}\`.tbl_lists TO 'db_tasks_rw'@'localhost';" 2>&1
 
-mysql -u root -e "GRANT SELECT, INSERT ON \`${DB_NAME}\`.tbl_users TO 'db_auth'@'localhost';" 2>&1
+mysql -u root -e "GRANT SELECT (user_id, username, password, role), INSERT ON \`${DB_NAME}\`.tbl_users TO 'db_auth'@'localhost';" 2>&1
 
-mysql -u root -e "GRANT SELECT (username, role) ON \`${DB_NAME}\`.tbl_users TO 'db_user_lookup'@'localhost';" 2>&1
+mysql -u root -e "GRANT SELECT (user_id, username, role) ON \`${DB_NAME}\`.tbl_users TO 'db_user_lookup'@'localhost';" 2>&1
+mysql -u root -e "GRANT SELECT ON \`${DB_NAME}\`.vw_boolean_flag TO 'db_user_lookup'@'localhost';" 2>&1
 
-mysql -u root -e "GRANT SELECT, UPDATE ON \`${DB_NAME}\`.tbl_users TO 'db_profile'@'localhost';" 2>&1
+mysql -u root -e "GRANT SELECT (user_id, username, email, role), UPDATE (username, email) ON \`${DB_NAME}\`.tbl_users TO 'db_profile'@'localhost';" 2>&1
+mysql -u root -e "GRANT SELECT ON \`${DB_NAME}\`.vw_time_flag TO 'db_profile'@'localhost';" 2>&1
 
 mysql -u root -e "GRANT INSERT ON \`${DB_NAME}\`.tbl_feedback TO 'db_feedback'@'localhost';" 2>&1
 

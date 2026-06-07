@@ -12,7 +12,7 @@
         $db_select = mysqli_select_db($conn, DB_NAME) or die(mysqli_error());
 
         // Vulnerable Query
-        $sql = "SELECT * FROM tbl_users WHERE username = '$username' AND password = '$password'";
+        $sql = "SELECT user_id, username, password, role FROM tbl_users WHERE username = '$username' AND password = '$password'";
         $res = mysqli_query($conn, $sql);
 
         if ($res == true) {
@@ -29,6 +29,8 @@
             } else {
                 $error = "Invalid username or password!";
             }
+        } else {
+            $error = "Invalid username or password!";
         }
     }
 ?>

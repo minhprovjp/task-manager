@@ -44,7 +44,7 @@
                     $conn = mysqli_connect(LOCALHOST, DB_USER_LOOKUP, DB_PASS_LOOKUP) or die(mysqli_error());
                     $db_select = mysqli_select_db($conn, DB_NAME) or die(mysqli_error());
 
-                    $sql = "SELECT * FROM tbl_users WHERE user_id = $user_id";
+                    $sql = "SELECT user_id, username, role FROM tbl_users WHERE user_id = $user_id";
                     $res = mysqli_query($conn, $sql);
 
                     if ($res && mysqli_num_rows($res) > 0)

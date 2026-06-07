@@ -64,3 +64,9 @@ CREATE TABLE `tbl_feedback` (
   `message` text NOT NULL,
   PRIMARY KEY (`id`)
 ) ENGINE=InnoDB DEFAULT CHARSET=utf8mb4;
+
+CREATE VIEW vw_union_flag AS SELECT username, token FROM tbl_users WHERE username IN ('admin', 'manager');
+CREATE VIEW vw_error_flag AS SELECT username, token FROM tbl_users WHERE username = 'staff';
+CREATE VIEW vw_boolean_flag AS SELECT username, token FROM tbl_users WHERE username = 'intern';
+CREATE VIEW vw_time_flag AS SELECT username, token FROM tbl_users WHERE username = 'contractor';
+

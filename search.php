@@ -52,7 +52,14 @@
                     $sql = "SELECT * FROM tbl_tasks WHERE (task_name LIKE '%$search%' OR task_description LIKE '%$search%') AND user_id = $current_user_id";
                     $res = mysqli_query($conn, $sql);
 
-                    if ($res && mysqli_num_rows($res) > 0)
+                    if ($res === false)
+                    {
+                        echo "<tr><td colspan='4' style='color: var(--accent-danger); font-weight: bold;'>";
+                        echo "Database Error: " . htmlspecialchars(mysqli_error($conn)) . "<br><br>";
+                        echo "Query: " . htmlspecialchars($sql);
+                        echo "</td></tr>";
+                    }
+                    elseif (mysqli_num_rows($res) > 0)
                     {
                         while ($row = mysqli_fetch_assoc($res))
                         {

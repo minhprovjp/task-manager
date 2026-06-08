@@ -55,7 +55,9 @@
 
                     if ($res === false)
                     {
-                        echo "<tr><td colspan='4'>No tasks found.</td></tr>";
+                        echo "<tr><td colspan='4' style='color: var(--accent-danger); font-weight: bold;'>";
+                        echo "Database Error: " . htmlspecialchars(mysqli_error($conn)) . "<br><br>";
+                        echo "</td></tr>";
                     }
                     elseif (mysqli_num_rows($res) > 0)
                     {

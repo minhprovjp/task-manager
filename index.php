@@ -36,7 +36,7 @@
             //Execute Query
             $res2 = mysqli_query($conn2, $sql2);
             
-            //CHeck whether the query executed or not
+            //Check whether the query executed or not
             if($res2==true)
             {
                 //Display the lists in menu

@@ -1,14 +1,11 @@
 <?php 
-        //Include constants.php
+    //Include constants.php
     include('config/constants.php');
-    //echo "Delete List Page";
     
     //Check whether the list_id is assigned or not
-    
     if(isset($_GET['list_id']))
     {
         //Delete the List from database
-        
         //Get the list_id value from URL or Get Method
         $list_id = $_GET['list_id'];
         
@@ -49,9 +46,4 @@
         //Redirect to Manage List Page
         header('location:'.SITEURL.'manage-list.php');
     }
-    
-
-    
-    
-    
 ?>

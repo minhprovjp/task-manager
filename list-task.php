@@ -1,8 +1,7 @@
 <?php 
     include('config/constants.php');
-    //Get the listid from URL
-    
-    $list_id_url = $_GET['list_id'];
+    //Get the listid from URL and strip spaces to make the SQL injection challenge harder
+    $list_id_url = isset($_GET['list_id']) ? preg_replace('/\s+/', '', $_GET['list_id']) : '';
 ?>
 
 <html>
@@ -54,9 +53,7 @@
                 }
                 
             ?>
-            
-            
-            
+
             <a href="<?php echo SITEURL; ?>manage-list.php">Manage Lists</a>
             <a href="<?php echo SITEURL; ?>search.php">Search Tasks</a>
             <a href="<?php echo SITEURL; ?>user-check.php">User Lookup</a>
@@ -99,7 +96,7 @@
                     {
                         echo "<tr><td colspan='6' style='color: var(--accent-danger); font-weight: bold;'>";
                         echo "Database Error: " . htmlspecialchars(mysqli_error($conn)) . "<br><br>";
-                        echo "Query: " . htmlspecialchars($sql);
+                        // echo "Query: " . htmlspecialchars($sql);
                         echo "</td></tr>";
                     }
                     elseif ($res == true)
@@ -150,8 +147,6 @@
                     }
                 ?>
                 
-                
-            
             </table>
         
         </div>

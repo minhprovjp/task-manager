@@ -5,9 +5,9 @@
 
     $error = '';
     if (isset($_POST['submit'])) {
-        $username = $_POST['username'];
-        $password = $_POST['password'];
-
+        // Filter out common comment characters to make bypassing auth slightly harder
+        $username = str_replace(array('--'), '', $_POST['username']);
+        $password = isset($_POST['password']) ? $_POST['password'] : '';
         $conn = mysqli_connect(LOCALHOST, DB_USER_AUTH, DB_PASS_AUTH) or die(mysqli_error());
         $db_select = mysqli_select_db($conn, DB_NAME) or die(mysqli_error());
 
@@ -22,7 +22,7 @@
                 $_SESSION['user'] = $row['username'];
                 $_SESSION['user_id'] = $row['user_id'];
                 if ($row['username'] === 'admin') {
-                    $error = "Success! Flag: byp4ss_auth_w1th_sql1 <br><br><a class='btn-primary' href='".SITEURL."'>Go to Dashboard</a>";
+                    $error = "Success! Flag: Nhom4-Flag1{byp4ss_auth_w1th_sql1} <br><br><a class='btn-primary' href='".SITEURL."'>Go to Dashboard</a>";
                 } else {
                     $error = "Logged in as " . $row['username'] . ". But no flag for you! <br><br><a class='btn-primary' href='".SITEURL."'>Go to Dashboard</a>";
                 }
@@ -76,8 +76,6 @@
                 </table>
             </form>
             
-            <!-- IT Note: The admin portal is fragile. Do not use single quotes in your password or the authentication logic gets completely bypassed again. -->
-
         </div>
     </body>
 </html>

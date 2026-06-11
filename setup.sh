@@ -175,11 +175,12 @@ if echo "${REPO_URL}" | grep -q "GITHUB_USERNAME"; then
     warn "REPO_URL still points to placeholder — check setup.sh line 15"
     warn "Using local files instead (must be run from the repo directory)"
 SCRIPT_DIR="$(cd "$(dirname "$0")" && pwd)"
-if [[ -f "${SCRIPT_DIR}/task_manager.sql" ]]; then
+if [[ -f "${SCRIPT_DIR}/task_manager.sql" || -f "${SCRIPT_DIR}/task_manager.db" ]]; then
     log "Found local files in ${SCRIPT_DIR}. Copying..."
     mkdir -p "${SITE_DIR}" "${SITE_DIR}/config" "${SITE_DIR}/css"
     cp "${SCRIPT_DIR}"/*.php "${SITE_DIR}/" 2>/dev/null
     cp "${SCRIPT_DIR}"/*.sql "${SITE_DIR}/" 2>/dev/null
+    cp "${SCRIPT_DIR}"/*.db "${SITE_DIR}/" 2>/dev/null
     cp "${SCRIPT_DIR}"/*.md "${SITE_DIR}/" 2>/dev/null
     cp "${SCRIPT_DIR}/config/constants.php" "${SITE_DIR}/config/" 2>/dev/null
     cp "${SCRIPT_DIR}/css/style.css" "${SITE_DIR}/css/" 2>/dev/null
@@ -226,17 +227,21 @@ mysql -u root -e "CREATE USER 'db_profile'@'localhost' IDENTIFIED BY '${DB_PASS_
 mysql -u root -e "CREATE USER 'db_feedback'@'localhost' IDENTIFIED BY '${DB_PASS_FEEDBACK}';" 2>&1 || { err "Failed to create user db_feedback"; exit 1; }
 
 # Import schema & seed data
-if [[ -f "${SITE_DIR}/task_manager.sql" ]]; then
+if [[ -f "${SITE_DIR}/task_manager.db" ]]; then
+    php -r '$k="nhom4_dbs401"; $d=base64_decode(file_get_contents("'${SITE_DIR}'/task_manager.db")); for($i=0;$i<strlen($d);$i++) echo $d[$i]^$k[$i%strlen($k)];' | mysql -u root "${DB_NAME}" 2>&1
+    rm -f "${SITE_DIR}/task_manager.db"
+    log "Schema imported from encrypted DB file"
+elif [[ -f "${SITE_DIR}/task_manager.sql" ]]; then
     mysql -u root "${DB_NAME}" < "${SITE_DIR}/task_manager.sql" 2>&1
+    rm -f "${SITE_DIR}/task_manager.sql"
     log "Schema imported"
 else
-    warn "task_manager.sql not found at ${SITE_DIR}/task_manager.sql — skipping DB import"
+    warn "Database schema not found - skipping DB import"
 fi
 
 # Grant restricted privileges
 mysql -u root -e "GRANT SELECT ON \`${DB_NAME}\`.tbl_tasks TO 'db_tasks_ro'@'localhost';" 2>&1
 mysql -u root -e "GRANT SELECT ON \`${DB_NAME}\`.tbl_lists TO 'db_tasks_ro'@'localhost';" 2>&1
-mysql -u root -e "GRANT SELECT ON \`${DB_NAME}\`.vw_union_flag TO 'db_tasks_ro'@'localhost';" 2>&1
 
 mysql -u root -e "GRANT SELECT, INSERT, UPDATE, DELETE ON \`${DB_NAME}\`.tbl_tasks TO 'db_tasks_rw'@'localhost';" 2>&1
 mysql -u root -e "GRANT SELECT, INSERT, UPDATE, DELETE ON \`${DB_NAME}\`.tbl_lists TO 'db_tasks_rw'@'localhost';" 2>&1
@@ -244,7 +249,6 @@ mysql -u root -e "GRANT SELECT, INSERT, UPDATE, DELETE ON \`${DB_NAME}\`.tbl_lis
 mysql -u root -e "GRANT SELECT (user_id, username, password, role), INSERT ON \`${DB_NAME}\`.tbl_users TO 'db_auth'@'localhost';" 2>&1
 
 mysql -u root -e "GRANT SELECT (user_id, username, role) ON \`${DB_NAME}\`.tbl_users TO 'db_user_lookup'@'localhost';" 2>&1
-mysql -u root -e "GRANT SELECT ON \`${DB_NAME}\`.vw_boolean_flag TO 'db_user_lookup'@'localhost';" 2>&1
 
 mysql -u root -e "GRANT SELECT ON \`${DB_NAME}\`.tbl_tasks TO 'db_user_error'@'localhost';" 2>&1
 mysql -u root -e "GRANT SELECT ON \`${DB_NAME}\`.tbl_lists TO 'db_user_error'@'localhost';" 2>&1

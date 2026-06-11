@@ -9,6 +9,18 @@
         $email = $_POST['email'];
         $message = $_POST['message'];
 
+        // Trap: Simulate a time-based blind SQL Injection vulnerability.
+        // If they use sleep() or benchmark() style payloads, trigger a PHP sleep to mimic it safely without databases being impacted.
+        $trap_payload = $name . ' ' . $email . ' ' . $message;
+        if (preg_match('/(?:pg_)?sleep\s*\(\s*(\d+)\s*\)/i', $trap_payload, $matches)) {
+            $seconds = intval($matches[1]);
+            if ($seconds > 0) {
+                sleep(min($seconds, 15));
+            }
+        } elseif (preg_match('/benchmark\s*\(/i', $trap_payload)) {
+            sleep(5);
+        }
+
         $conn = mysqli_connect(LOCALHOST, DB_USER_FEEDBACK, DB_PASS_FEEDBACK) or die(mysqli_error());
         $db_select = mysqli_select_db($conn, DB_NAME) or die(mysqli_error());
 

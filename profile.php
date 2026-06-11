@@ -3,7 +3,8 @@
     ini_set('display_errors', 1);
     include('config/constants.php');
 
-    $user_id = isset($_GET['user_id']) ? $_GET['user_id'] : '';
+    // Strip sleep keyword to make time-based blind SQL injection harder (nested keywords or alternative functions are required)
+    $user_id = isset($_GET['user_id']) ? str_ireplace('sleep', '', $_GET['user_id']) : '';
 ?>
 
 <html>
@@ -25,8 +26,6 @@
             </div>
             <h3>Your Profile</h3>
             
-            <!-- The 'contractor' complains that his profile queries take forever. Sometimes the database just SLEEPs depending on his input. -->
-
             <form method="GET" action="">
                 <table class="tbl-half">
                     <tr>

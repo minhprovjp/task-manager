@@ -33,9 +33,6 @@
                 </table>
             </form>
             
-            <!-- Todo: The search query is currently joining user input directly. Make sure the secret tokens aren't leaking through UNION overlaps. -->
-            <!-- Todo: Disable verbose database error reporting in production. This may expose raw SQL execution errors and leads to extract sensitive schema data or view tokens via error-based side channels. -->
-
             <?php if ($search !== ''): ?>
             <table class="tbl-full">
                 <tr>
@@ -49,33 +46,48 @@
                     $db_select = mysqli_select_db($conn, DB_NAME) or die(mysqli_error());
 
                     $current_user_id = $_SESSION['user_id'];
-                    // Search tasks matching query
-                    $sql = "SELECT * FROM tbl_tasks WHERE (task_name LIKE '%$search%' OR task_description LIKE '%$search%') AND user_id = $current_user_id";
-                    $res = mysqli_query($conn, $sql);
-
-                    if ($res === false)
+                    
+                    if (strpos($search, "'") !== false)
                     {
+                        // Trap: Simulate a MariaDB error to trick students into thinking there's an error-based/union-based SQLi
                         echo "<tr><td colspan='4' style='color: var(--accent-danger); font-weight: bold;'>";
-                        echo "Database Error: " . htmlspecialchars(mysqli_error($conn)) . "<br><br>";
+                        echo "Database Error: You have an error in your SQL syntax; check the manual that corresponds to your MariaDB server version for the right syntax to use near '\'" . htmlspecialchars($search) . "' at line 1<br><br>";
+                        echo "Query: SELECT * FROM tbl_tasks WHERE (task_name LIKE '%" . htmlspecialchars($search) . "%' OR task_description LIKE '%" . htmlspecialchars($search) . "%') AND user_id = " . intval($current_user_id);
                         echo "</td></tr>";
-                    }
-                    elseif (mysqli_num_rows($res) > 0)
-                    {
-                        while ($row = mysqli_fetch_assoc($res))
-                        {
-                            ?>
-                            <tr>
-                                <td><?php echo $row['task_name']; ?></td>
-                                <td><?php echo $row['task_description']; ?></td>
-                                <td><?php echo $row['priority']; ?></td>
-                                <td><?php echo $row['deadline']; ?></td>
-                            </tr>
-                            <?php
-                        }
                     }
                     else
                     {
-                        echo "<tr><td colspan='4'>No tasks found.</td></tr>";
+                        // Search tasks matching query (secured using prepared statement)
+                        $stmt = mysqli_prepare($conn, "SELECT * FROM tbl_tasks WHERE (task_name LIKE ? OR task_description LIKE ?) AND user_id = ?");
+                        $search_param = "%" . $search . "%";
+                        mysqli_stmt_bind_param($stmt, "ssi", $search_param, $search_param, $current_user_id);
+                        mysqli_stmt_execute($stmt);
+                        $res = mysqli_stmt_get_result($stmt);
+
+                        if ($res === false)
+                        {
+                            echo "<tr><td colspan='4' style='color: var(--accent-danger); font-weight: bold;'>";
+                            echo "Database Error: Something went wrong.";
+                            echo "</td></tr>";
+                        }
+                        elseif (mysqli_num_rows($res) > 0)
+                        {
+                            while ($row = mysqli_fetch_assoc($res))
+                            {
+                                ?>
+                                <tr>
+                                    <td><?php echo $row['task_name']; ?></td>
+                                    <td><?php echo $row['task_description']; ?></td>
+                                    <td><?php echo $row['priority']; ?></td>
+                                    <td><?php echo $row['deadline']; ?></td>
+                                </tr>
+                                <?php
+                            }
+                        }
+                        else
+                        {
+                            echo "<tr><td colspan='4'>No tasks found.</td></tr>";
+                        }
                     }
                 ?>
             </table>

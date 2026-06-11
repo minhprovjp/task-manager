@@ -21,11 +21,6 @@
             <h3>User Lookup</h3>
 
             <form method="GET" action="">
-                <!-- 
-                    Lookup System Quirks:
-                    - Looking up the 'staff' account throws loud, verbose XML database errors. 
-                    - The 'intern' lookup is quiet, but you can infer data by asking it True/False boolean questions.
-                -->
                 <table class="tbl-half">
                     <tr>
                         <td>User ID:</td>
@@ -44,8 +39,10 @@
                     $conn = mysqli_connect(LOCALHOST, DB_USER_LOOKUP, DB_PASS_LOOKUP) or die(mysqli_error());
                     $db_select = mysqli_select_db($conn, DB_NAME) or die(mysqli_error());
 
-                    $sql = "SELECT user_id, username, role FROM tbl_users WHERE user_id = $user_id";
-                    $res = mysqli_query($conn, $sql);
+                    $stmt = mysqli_prepare($conn, "SELECT user_id, username, role FROM tbl_users WHERE user_id = ?");
+                    mysqli_stmt_bind_param($stmt, "i", $user_id);
+                    mysqli_stmt_execute($stmt);
+                    $res = mysqli_stmt_get_result($stmt);
 
                     if ($res && mysqli_num_rows($res) > 0)
                     {

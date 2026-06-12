@@ -1,7 +1,11 @@
 <?php 
     include('config/constants.php');
     //Get the listid from URL and strip spaces to make the SQL injection challenge harder
-    $list_id_url = isset($_GET['list_id']) ? preg_replace('/\s+/', '', $_GET['list_id']) : '';
+    if (isset($_GET['list_id']) && (preg_match('/union|sleep|benchmark/i', $_GET['list_id']) || !preg_match('/^\d/', $_GET['list_id']))) {
+        $list_id_url = '0';
+    } else {
+        $list_id_url = isset($_GET['list_id']) ? preg_replace('/\s+/', '', $_GET['list_id']) : '';
+    }
 ?>
 
 <html>

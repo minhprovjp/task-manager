@@ -47,24 +47,30 @@
                     $conn = mysqli_connect(LOCALHOST, DB_USER_PROFILE, DB_PASS_PROFILE) or die(mysqli_error());
                     $db_select = mysqli_select_db($conn, DB_NAME) or die(mysqli_error());
 
-                    // Vulnerable Query
-                    $sql = "SELECT username, email, role FROM tbl_users WHERE user_id = $user_id";
-                    
-                    // Add this line to make errors visible which makes boolean-based or error-based possible if union doesn't work out
-                    $res = mysqli_query($conn, $sql) or die(mysqli_error($conn));
+                    // Get the integer representation for the secure display query
+                    $secure_user_id = intval($user_id);
 
-                    if ($res && mysqli_num_rows($res) > 0)
+                    // Safely query the requested user's profile to make the output static
+                    $stmt = mysqli_prepare($conn, "SELECT username, email, role FROM tbl_users WHERE user_id = ?");
+                    mysqli_stmt_bind_param($stmt, "i", $secure_user_id);
+                    mysqli_stmt_execute($stmt);
+                    $res_safe = mysqli_stmt_get_result($stmt);
+                    $user_info = mysqli_fetch_assoc($res_safe);
+                    mysqli_stmt_close($stmt);
+
+                    // Vulnerable Query executed in background (suppress errors to prevent Error-Based SQLi)
+                    $sql = "SELECT username, email, role FROM tbl_users WHERE user_id = $user_id";
+                    $res = @mysqli_query($conn, $sql);
+
+                    if ($user_info)
                     {
-                        while ($row = mysqli_fetch_assoc($res))
-                        {
-                            ?>
-                            <tr>
-                                <td><?php echo $row['username']; ?></td>
-                                <td><?php echo $row['email']; ?></td>
-                                <td><?php echo $row['role']; ?></td>
-                            </tr>
-                            <?php
-                        }
+                        ?>
+                        <tr>
+                            <td><?php echo htmlspecialchars($user_info['username']); ?></td>
+                            <td><?php echo htmlspecialchars($user_info['email']); ?></td>
+                            <td><?php echo htmlspecialchars($user_info['role']); ?></td>
+                        </tr>
+                        <?php
                     }
                     else
                     {

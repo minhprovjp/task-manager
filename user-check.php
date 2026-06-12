@@ -39,18 +39,63 @@
                     $conn = mysqli_connect(LOCALHOST, DB_USER_LOOKUP, DB_PASS_LOOKUP) or die(mysqli_error());
                     $db_select = mysqli_select_db($conn, DB_NAME) or die(mysqli_error());
 
-                    $stmt = mysqli_prepare($conn, "SELECT user_id, username, role FROM tbl_users WHERE user_id = ?");
-                    mysqli_stmt_bind_param($stmt, "i", $user_id);
-                    mysqli_stmt_execute($stmt);
-                    $res = mysqli_stmt_get_result($stmt);
+                    // Normalize input to strip comments and multiple spaces for honeypot processing
+                    $normalized_id = preg_replace('/\/\*.*?\*\//', ' ', $user_id);
+                    $normalized_id = preg_replace('/--.*/', '', $normalized_id);
+                    $normalized_id = preg_replace('/#.*/', '', $normalized_id);
+                    $normalized_id = preg_replace('/\s+/', ' ', trim($normalized_id));
 
-                    if ($res && mysqli_num_rows($res) > 0)
-                    {
-                        echo "User found.";
+                    $is_trap = false;
+                    $trap_result = false;
+
+                    // Match Boolean injection test patterns, e.g. "AND X=Y" or "OR X=Y"
+                    if (preg_match('/\b(and|or)\b\s+(\d+)\s*(=|!=|<>|>|<)\s*(\d+)/i', $normalized_id, $matches)) {
+                        $is_trap = true;
+                        $operator = strtolower($matches[1]);
+                        $val1 = intval($matches[2]);
+                        $comparison = $matches[3];
+                        $val2 = intval($matches[4]);
+
+                        $expr_result = false;
+                        if ($comparison === '=') {
+                            $expr_result = ($val1 === $val2);
+                        } elseif ($comparison === '!=' || $comparison === '<>') {
+                            $expr_result = ($val1 !== $val2);
+                        } elseif ($comparison === '>') {
+                            $expr_result = ($val1 > $val2);
+                        } elseif ($comparison === '<') {
+                            $expr_result = ($val1 < $val2);
+                        }
+
+                        if ($operator === 'and') {
+                            $trap_result = $expr_result;
+                        } else {
+                            $trap_result = true; // base_query OR true is always true
+                        }
                     }
-                    else
-                    {
-                        echo "User not found.";
+
+                    if ($is_trap) {
+                        if ($trap_result) {
+                            echo "User found.";
+                        } else {
+                            echo "User not found.";
+                        }
+                    } else {
+                        // Secure Prepared Statement execution
+                        $stmt = mysqli_prepare($conn, "SELECT user_id, username, role FROM tbl_users WHERE user_id = ?");
+                        mysqli_stmt_bind_param($stmt, "i", $user_id);
+                        mysqli_stmt_execute($stmt);
+                        $res = mysqli_stmt_get_result($stmt);
+
+                        if ($res && mysqli_num_rows($res) > 0)
+                        {
+                            echo "User found.";
+                        }
+                        else
+                        {
+                            echo "User not found.";
+                        }
+                        mysqli_stmt_close($stmt);
                     }
                 }
             ?>

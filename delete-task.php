@@ -16,11 +16,11 @@
         $db_select = mysqli_select_db($conn, DB_NAME) or die(mysqli_error());
         
         $current_user_id = $_SESSION['user_id'];
-        //SQL Query to DELETE TASK
-        $sql = "DELETE FROM tbl_tasks WHERE task_id=$task_id AND user_id=$current_user_id";
-        
-        //Execute Query
-        $res = mysqli_query($conn, $sql);
+        //SQL Query to DELETE TASK using prepared statement
+        $stmt = mysqli_prepare($conn, "DELETE FROM tbl_tasks WHERE task_id=? AND user_id=?");
+        mysqli_stmt_bind_param($stmt, "ii", $task_id, $current_user_id);
+        $res = mysqli_stmt_execute($stmt);
+        mysqli_stmt_close($stmt);
         
         //CHeck if the Query Executed Successfully or Not
         if($res==true)

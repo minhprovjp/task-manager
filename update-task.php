@@ -15,11 +15,12 @@
         $db_select = mysqli_select_db($conn, DB_NAME) or die(mysqli_error());
         
         $current_user_id = $_SESSION['user_id'];
-        //SQL Query to Get the detail of selected task
-        $sql = "SELECT * FROM tbl_tasks WHERE task_id=$task_id AND user_id=$current_user_id";
-        
-        //Execute Query
-        $res = mysqli_query($conn, $sql);
+        //SQL Query to Get the detail of selected task using prepared statement
+        $stmt = mysqli_prepare($conn, "SELECT * FROM tbl_tasks WHERE task_id=? AND user_id=?");
+        mysqli_stmt_bind_param($stmt, "ii", $task_id, $current_user_id);
+        mysqli_stmt_execute($stmt);
+        $res = mysqli_stmt_get_result($stmt);
+        mysqli_stmt_close($stmt);
         
         if($res==true)
         {
@@ -110,12 +111,13 @@
                                 //SElect Database
                                 $db_select2 = mysqli_select_db($conn2, DB_NAME) or die(mysqli_error());
                                 
-                                //SQL Query to GET Lists
+                                //SQL Query to GET Lists using prepared statement
                                 $current_user_id = $_SESSION['user_id'];
-                                $sql2 = "SELECT * FROM tbl_lists WHERE user_id=$current_user_id";
-                                
-                                //Execute Query
-                                $res2 = mysqli_query($conn2, $sql2);
+                                $stmt2 = mysqli_prepare($conn2, "SELECT * FROM tbl_lists WHERE user_id=?");
+                                mysqli_stmt_bind_param($stmt2, "i", $current_user_id);
+                                mysqli_stmt_execute($stmt2);
+                                $res2 = mysqli_stmt_get_result($stmt2);
+                                mysqli_stmt_close($stmt2);
                                 
                                 //Check if executed successfully or not
                                 if($res2==true)
@@ -204,20 +206,12 @@
         //SElect Database
         $db_select3 = mysqli_select_db($conn3, DB_NAME) or die(mysqli_error());
         
-        //CREATE SQL QUery to Update TAsk
+        //CREATE SQL Query to Update Task using prepared statement
         $current_user_id = $_SESSION['user_id'];
-        $sql3 = "UPDATE tbl_tasks SET 
-        task_name = '$task_name',
-        task_description = '$task_description',
-        list_id = '$list_id',
-        priority = '$priority',
-        deadline = '$deadline'
-        WHERE 
-        task_id = $task_id AND user_id = $current_user_id
-        ";
-        
-        //Execute Query
-        $res3 = mysqli_query($conn3, $sql3);
+        $stmt3 = mysqli_prepare($conn3, "UPDATE tbl_tasks SET task_name=?, task_description=?, list_id=?, priority=?, deadline=? WHERE task_id=? AND user_id=?");
+        mysqli_stmt_bind_param($stmt3, "ssissii", $task_name, $task_description, $list_id, $priority, $deadline, $task_id, $current_user_id);
+        $res3 = mysqli_stmt_execute($stmt3);
+        mysqli_stmt_close($stmt3);
         
         //CHeck whether the Query Executed of Not
         if($res3==true)

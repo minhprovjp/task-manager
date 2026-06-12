@@ -16,11 +16,12 @@
         $db_select = mysqli_select_db($conn, DB_NAME) or die(mysqli_error());
         
         $current_user_id = $_SESSION['user_id'];
-        //Query to Get the Values from Database
-        $sql = "SELECT * FROM tbl_lists WHERE list_id=$list_id AND user_id=$current_user_id";
-        
-        //Execute Query
-        $res = mysqli_query($conn, $sql);
+        //Query to Get the Values from Database using prepared statement
+        $stmt = mysqli_prepare($conn, "SELECT * FROM tbl_lists WHERE list_id=? AND user_id=?");
+        mysqli_stmt_bind_param($stmt, "ii", $list_id, $current_user_id);
+        mysqli_stmt_execute($stmt);
+        $res = mysqli_stmt_get_result($stmt);
+        mysqli_stmt_close($stmt);
         
         //CHekc whether the query executed successfully or not
         if($res==true)
@@ -142,15 +143,11 @@
         $db_select2 = mysqli_select_db($conn2, DB_NAME);
         
         $current_user_id = $_SESSION['user_id'];
-        //QUERY to Update List
-        $sql2 = "UPDATE tbl_lists SET 
-            list_name = '$list_name',
-            list_description = '$list_description' 
-            WHERE list_id=$list_id AND user_id=$current_user_id
-        ";
-        
-        //Execute the Query
-        $res2 = mysqli_query($conn2, $sql2);
+        //QUERY to Update List using prepared statement
+        $stmt2 = mysqli_prepare($conn2, "UPDATE tbl_lists SET list_name=?, list_description=? WHERE list_id=? AND user_id=?");
+        mysqli_stmt_bind_param($stmt2, "ssii", $list_name, $list_description, $list_id, $current_user_id);
+        $res2 = mysqli_stmt_execute($stmt2);
+        mysqli_stmt_close($stmt2);
         
         //Check whether the query executed successfully or not
         if($res2==true)

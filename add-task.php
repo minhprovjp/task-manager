@@ -64,12 +64,13 @@
                                 //SElect Database
                                 $db_select = mysqli_select_db($conn, DB_NAME) or die(mysqli_error());
                                 
-                                //SQL query to get the list from table
+                                //SQL query to get the list from table using prepared statement
                                 $current_user_id = $_SESSION['user_id'];
-                                $sql = "SELECT * FROM tbl_lists WHERE user_id = $current_user_id";
-                                
-                                //Execute Query
-                                $res = mysqli_query($conn, $sql);
+                                $stmt = mysqli_prepare($conn, "SELECT * FROM tbl_lists WHERE user_id = ?");
+                                mysqli_stmt_bind_param($stmt, "i", $current_user_id);
+                                mysqli_stmt_execute($stmt);
+                                $res = mysqli_stmt_get_result($stmt);
+                                mysqli_stmt_close($stmt);
                                 
                                 //Check whether the query executed or not
                                 if($res==true)
@@ -155,19 +156,12 @@
         //SElect Database
         $db_select2 = mysqli_select_db($conn2, DB_NAME) or die(mysqli_error());
         
-        //CReate SQL Query to INSERT DATA into DAtabase
+        //Create SQL Query to INSERT DATA into Database using prepared statement
         $current_user_id = $_SESSION['user_id'];
-        $sql2 = "INSERT INTO tbl_tasks SET 
-            task_name = '$task_name',
-            task_description = '$task_description',
-            list_id = $list_id,
-            priority = '$priority',
-            deadline = '$deadline',
-            user_id = $current_user_id
-        ";
-        
-        //Execute Query
-        $res2 = mysqli_query($conn2, $sql2);
+        $stmt2 = mysqli_prepare($conn2, "INSERT INTO tbl_tasks (task_name, task_description, list_id, priority, deadline, user_id) VALUES (?, ?, ?, ?, ?, ?)");
+        mysqli_stmt_bind_param($stmt2, "ssissi", $task_name, $task_description, $list_id, $priority, $deadline, $current_user_id);
+        $res2 = mysqli_stmt_execute($stmt2);
+        mysqli_stmt_close($stmt2);
         
         //Check whetehre the query executed successfully or not
         if($res2==true)

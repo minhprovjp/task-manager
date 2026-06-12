@@ -16,17 +16,20 @@
         $db_select = mysqli_select_db($conn, DB_NAME) or die(mysqli_error());
         
         $current_user_id = $_SESSION['user_id'];
-        //Write the Query to DELETE List from DAtabase
-        $sql = "DELETE FROM tbl_lists WHERE list_id=$list_id AND user_id=$current_user_id";
-        
-        //Execute The Query
-        $res = mysqli_query($conn, $sql);
+        //Write the Query to DELETE List from Database using prepared statement
+        $stmt = mysqli_prepare($conn, "DELETE FROM tbl_lists WHERE list_id=? AND user_id=?");
+        mysqli_stmt_bind_param($stmt, "ii", $list_id, $current_user_id);
+        $res = mysqli_stmt_execute($stmt);
+        mysqli_stmt_close($stmt);
         
         //Check whether the query executed successfully or not
         if($res==true)
         {
-            // Also delete associated tasks
-            mysqli_query($conn, "DELETE FROM tbl_tasks WHERE list_id=$list_id AND user_id=$current_user_id");
+            // Also delete associated tasks using prepared statement
+            $stmt_tasks = mysqli_prepare($conn, "DELETE FROM tbl_tasks WHERE list_id=? AND user_id=?");
+            mysqli_stmt_bind_param($stmt_tasks, "ii", $list_id, $current_user_id);
+            mysqli_stmt_execute($stmt_tasks);
+            mysqli_stmt_close($stmt_tasks);
             
             //Query Executed Successfully which means list is deleted successfully
             $_SESSION['delete'] = "List Deleted Successfully";

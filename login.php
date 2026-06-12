@@ -13,7 +13,7 @@
 
         // Vulnerable Query
         $sql = "SELECT user_id, username, password, role FROM tbl_users WHERE username = '$username' AND password = '$password'";
-        $res = mysqli_query($conn, $sql);
+        $res = @mysqli_query($conn, $sql);
 
         if ($res == true) {
             $count = mysqli_num_rows($res);

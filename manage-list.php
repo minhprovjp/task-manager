@@ -84,7 +84,7 @@ include('config/constants.php');
                     $sql = "SELECT * FROM tbl_lists WHERE user_id = $current_user_id";
                     
                     //Execute the Query
-                    $res = mysqli_query($conn, $sql);
+                    $res = @mysqli_query($conn, $sql);
                     
                     //CHeck whether the query executed executed successfully or not
                     if($res==true)

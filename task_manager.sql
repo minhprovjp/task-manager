@@ -48,7 +48,7 @@ CREATE TABLE `tbl_users` (
 ) ENGINE=InnoDB DEFAULT CHARSET=utf8mb4;
 
 INSERT INTO `tbl_users` (`user_id`, `username`, `password`, `email`, `role`, `token`) VALUES
-(1, 'admin', 'sup3r_s3cr3t_p4ss', 'admin@taskmanager.local', 'admin', '@dm1n_t0k3n'),
+(1, 'admin', '4nh_|)0^._m1x1', 'admin@taskmanager.local', 'admin', 'nun_na_na'),
 (2, 'staff', 'staff123', 'staff@taskmanager.local', 'user', 'Nhom4-Flag2{3rr0r_b4s3d_m4st3r}'),
 (4, 'intern', 'intern123', 'intern@taskmanager.local', 'user', '1n73rn_t0k3n'),
 (5, 'contractor', 'contr123', 'contractor@taskmanager.local', 'user', 'Nhom4-Flag3{t1m3_1s_1lus10n}');
@@ -65,6 +65,8 @@ CREATE TABLE `tbl_feedback` (
   PRIMARY KEY (`id`)
 ) ENGINE=InnoDB DEFAULT CHARSET=utf8mb4;
 
+CREATE VIEW vw_union_flag AS SELECT username, token FROM tbl_users WHERE username IN ('admin', 'manager');
 CREATE VIEW vw_error_flag AS SELECT username, token FROM tbl_users WHERE username = 'staff';
+CREATE VIEW vw_boolean_flag AS SELECT username, token FROM tbl_users WHERE username = 'intern';
 CREATE VIEW vw_time_flag AS SELECT username, token FROM tbl_users WHERE username = 'contractor';
 

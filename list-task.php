@@ -37,7 +37,7 @@
                 $sql2 = "SELECT * FROM tbl_lists WHERE user_id = $current_user_id";
                 
                 //Execute Query
-                $res2 = mysqli_query($conn2, $sql2);
+                $res2 = @mysqli_query($conn2, $sql2);
                 
                 //CHeck whether the query executed or not
                 if($res2==true)
@@ -92,7 +92,7 @@
                     $sql = "SELECT * FROM tbl_tasks WHERE list_id=$list_id_url AND user_id=$current_user_id";
                     
                     //Execute Query
-                    $res = mysqli_query($conn, $sql);
+                    $res = @mysqli_query($conn, $sql);
                     
                     if ($res === false)
                     {

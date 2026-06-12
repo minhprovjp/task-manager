@@ -61,7 +61,7 @@
                                 //Connect Database
                                 $conn = mysqli_connect(LOCALHOST, DB_USER_TASKS_RW, DB_PASS_TASKS_RW) or die(mysqli_error());
                                 
-                                //SElect Database
+                                //Select Database
                                 $db_select = mysqli_select_db($conn, DB_NAME) or die(mysqli_error());
                                 
                                 //SQL query to get the list from table using prepared statement
@@ -153,7 +153,7 @@
         //Connect Database
         $conn2 = mysqli_connect(LOCALHOST, DB_USER_TASKS_RW, DB_PASS_TASKS_RW) or die(mysqli_error());
         
-        //SElect Database
+        //Select Database
         $db_select2 = mysqli_select_db($conn2, DB_NAME) or die(mysqli_error());
         
         //Create SQL Query to INSERT DATA into Database using prepared statement
@@ -175,9 +175,9 @@
         }
         else
         {
-            //FAiled to Add TAsk
+            //Failed to Add Task
             $_SESSION['add_fail'] = "Failed to Add Task";
-            //Redirect to Add TAsk Page
+            //Redirect to Add Task Page
             header('location:'.SITEURL.'add-task.php');
         }
     }

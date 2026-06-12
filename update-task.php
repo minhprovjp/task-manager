@@ -108,7 +108,7 @@
                                 //Connect Database
                                 $conn2 = mysqli_connect(LOCALHOST, DB_USER_TASKS_RW, DB_PASS_TASKS_RW) or die(mysqli_error());
                                 
-                                //SElect Database
+                                //Select Database
                                 $db_select2 = mysqli_select_db($conn2, DB_NAME) or die(mysqli_error());
                                 
                                 //SQL Query to GET Lists using prepared statement
@@ -153,7 +153,6 @@
                                 }
                             ?>
                             
-                            
                         </select>
                     </td>
                 </tr>
@@ -185,7 +184,6 @@
     </body>
 </html>
 
-
 <?php 
 
     //Check if the button is clicked
@@ -203,7 +201,7 @@
         //Connect Database
         $conn3 = mysqli_connect(LOCALHOST, DB_USER_TASKS_RW, DB_PASS_TASKS_RW) or die(mysqli_error());
         
-        //SElect Database
+        //Select Database
         $db_select3 = mysqli_select_db($conn3, DB_NAME) or die(mysqli_error());
         
         //CREATE SQL Query to Update Task using prepared statement
@@ -231,48 +229,6 @@
             header('location:'.SITEURL.'update-task.php?task_id='.$task_id);
         }
         
-        
     }
 
 ?>
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-

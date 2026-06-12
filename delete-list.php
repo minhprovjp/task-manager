@@ -12,7 +12,7 @@
         //Connect the DAtabase
         $conn = mysqli_connect(LOCALHOST, DB_USER_TASKS_RW, DB_PASS_TASKS_RW) or die(mysqli_error());
         
-        //SElect Database
+        //Select Database
         $db_select = mysqli_select_db($conn, DB_NAME) or die(mysqli_error());
         
         $current_user_id = $_SESSION['user_id'];

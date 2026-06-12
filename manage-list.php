@@ -140,7 +140,6 @@ include('config/constants.php');
                 
                 ?>
                 
-                
             </table>
         </div>
         <!-- Table to display lists ends here -->

@@ -2,7 +2,6 @@
 
     include('config/constants.php'); 
     
-    
     //Get the Current Values of Selected List
     if(isset($_GET['list_id']))
     {
@@ -12,7 +11,7 @@
         //Connect to Database
         $conn = mysqli_connect(LOCALHOST, DB_USER_TASKS_RW, DB_PASS_TASKS_RW) or die(mysqli_error());
         
-        //SElect DAtabase
+        //Select DAtabase
         $db_select = mysqli_select_db($conn, DB_NAME) or die(mysqli_error());
         
         $current_user_id = $_SESSION['user_id'];
@@ -47,9 +46,6 @@
 
 ?>
 
-
-
-
 <html>
 
     <head>
@@ -59,9 +55,7 @@
     
     <body>
         
-        
         <div class="wrapper">
-        
         
         <h1>TASK MANAGER</h1>
         
@@ -76,9 +70,6 @@
         </div>
         
         <a class="btn-secondary" href="<?php echo SITEURL; ?>manage-list.php">Manage Lists</a>
-            
-       
-        
         
         <h3>Update List Page</h3>
         
@@ -118,12 +109,10 @@
         </form>
         
         </div>
-        
     
     </body>
 
 </html>
-
 
 <?php 
 
@@ -139,7 +128,7 @@
         //Connect Database
         $conn2 = mysqli_connect(LOCALHOST, DB_USER_TASKS_RW, DB_PASS_TASKS_RW) or die(mysqli_error());
         
-        //SElect the Database
+        //Select the Database
         $db_select2 = mysqli_select_db($conn2, DB_NAME);
         
         $current_user_id = $_SESSION['user_id'];
@@ -170,44 +159,3 @@
         
     }
 ?>
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-

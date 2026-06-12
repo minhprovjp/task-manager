@@ -67,11 +67,9 @@
         </div>
         <!-- Menu Ends Here -->
         
-        
         <div class="all-task">
         
             <a class="btn-primary" href="<?php echo SITEURL; ?>add-task.php">Add Task</a>
-            
             
             <table class="tbl-full">
             
@@ -159,34 +157,3 @@
     </body>
     
 </html>
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-

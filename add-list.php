@@ -95,7 +95,7 @@
         }
         */
         
-        //SElect Database
+        //Select Database
         $db_select = mysqli_select_db($conn, DB_NAME);
         
         //Check whether database is connected or not
@@ -118,7 +118,7 @@
             //Data inserted successfully
             //echo "Data Inserted";
             
-            //Create a SESSION VAriable to Display message
+            //Create a session Variable to Display message
             $_SESSION['add'] = "List Added Successfully";
             
             //Redirect to Manage List Page
@@ -131,7 +131,7 @@
             //Failed to insert data
             //echo "Failed to Insert Data";
             
-            //Create SEssion to save message
+            //Create Sessionto save message
             $_SESSION['add_fail'] = "Failed to Add List";
             
             //REdirect to Same Page
@@ -141,36 +141,3 @@
     }
 
 ?>
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-

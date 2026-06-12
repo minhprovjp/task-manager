@@ -12,7 +12,7 @@
         //Connect Databaes
         $conn = mysqli_connect(LOCALHOST, DB_USER_TASKS_RW, DB_PASS_TASKS_RW) or die(mysqli_error());
         
-        //SElect Database
+        //Select Database
         $db_select = mysqli_select_db($conn, DB_NAME) or die(mysqli_error());
         
         $current_user_id = $_SESSION['user_id'];
@@ -25,7 +25,7 @@
         //CHeck if the Query Executed Successfully or Not
         if($res==true)
         {
-            //Query Executed Successfully and TAsk Deleted
+            //Query Executed Successfully and Task Deleted
             $_SESSION['delete'] = "Task Deleted Successfully.";
             
             //redirect to Homepage

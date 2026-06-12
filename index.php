@@ -15,7 +15,6 @@
     
     <h1>TASK MANAGER</h1>
     
-    
     <!-- Menu Starts Here -->
     <div class="menu">
     
@@ -36,7 +35,7 @@
             //Execute Query
             $res2 = mysqli_query($conn2, $sql2);
             
-            //Check whether the query executed or not
+            //CHeck whether the query executed or not
             if($res2==true)
             {
                 //Display the lists in menu
@@ -54,8 +53,6 @@
             }
             
         ?>
-        
-        
         
         <a href="<?php echo SITEURL; ?>manage-list.php">Manage Lists</a>
         <a href="<?php echo SITEURL; ?>search.php">Search Tasks</a>
@@ -88,7 +85,6 @@
                 echo $_SESSION['update'];
                 unset($_SESSION['update']);
             }
-            
             
             if(isset($_SESSION['delete_fail']))
             {
@@ -152,11 +148,11 @@
                 //Execute Query
                 $res = mysqli_query($conn, $sql);
                 
-                //CHeck whether the query execueted o rnot
+                //Check whether the query executed or not
                 if($res==true)
                 {
-                    //DIsplay the Tasks from DAtabase
-                    //Dount the Tasks on Database first
+                    //Display the Tasks from Database
+                    //Count the Tasks on Database first
                     $count_rows = mysqli_num_rows($res);
                     
                     //Create Serial Number Variable
@@ -204,8 +200,6 @@
                 }
             
             ?>
-            
-            
         
         </table>
     
